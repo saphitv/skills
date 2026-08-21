@@ -6,9 +6,10 @@ Personal Codex and Claude Code skills. The repository is the source of truth; `i
 
 ```text
 skills/<name>/SKILL.md
-lock.json
 scripts/install.sh
 ```
+
+`.agent-skills.lock.json` records what is installed on the local machine. It stays untracked because destinations differ by account and host.
 
 Each skill owns a complete directory. Supporting scripts and references stay beside `SKILL.md`.
 
@@ -40,11 +41,9 @@ The installer copies whole skill directories from `skills/` into `$CODEX_HOME/sk
 
 1. Edit or add a skill.
 2. Commit the change.
-3. Run `./scripts/install.sh --lock` to refresh `lock.json` at the current commit.
-4. Review the diff.
-5. Run the installer normally on other machines.
+3. Run the installer normally on other machines.
 
-The lockfile intentionally uses a local commit rather than requiring GitHub. Replace the local source with a tarball download if you later want zero-checkout installation.
+Installation records the local commit rather than requiring GitHub. Replace the checkout-based installer with a tarball download if you later want zero-checkout installation.
 
 ## Security
 

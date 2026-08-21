@@ -41,7 +41,7 @@ installed_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 state="$(mktemp)"
 file_manifest="$(mktemp)"
 trap 'rm -f "$state" "$file_manifest"' EXIT
-jq -S . "$repo_root/lock.json" > "$state"
+jq -S . "$repo_root/.agent-skills.lock.json" > "$state"
 
 record_files() {
   local skill=$1 destination=$2 relative file hash
@@ -128,8 +128,8 @@ for source in skills/*; do
   done
 done
 
-jq -S . "$state" > "$repo_root/lock.json.tmp"
-mv "$repo_root/lock.json.tmp" "$repo_root/lock.json"
+jq -S . "$state" > "$repo_root/.agent-skills.lock.json.tmp"
+mv "$repo_root/.agent-skills.lock.json.tmp" "$repo_root/.agent-skills.lock.json"
 
 if [ "$mode" = lock ]; then
   echo "Locked $current_commit"

@@ -1,2 +1,3 @@
 .DS_Store
-lock.json.tmp
+.agent-skills.lock.json
+.agent-skills.lock.json.tmp
