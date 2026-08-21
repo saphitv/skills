@@ -13,68 +13,74 @@ targets=("$codex_home/skills" "$claude_config_dir/skills")
 mode=install
 
 case "${1-}" in
-  --lock) mode=lock; shift ;;
-  "") ;;
-  -h|--help) usage ;;
-  *) ;;
+  --lock)
+    mode=lock
+    shift
+    ;;
+  -h|--help)
+    usage
+    ;;
 esac
 
-if [ "${1-}" = "--lock" ] || [ "${1-}" = "-h" ] || [ "${1-}" = "--help" ]; then
+if [ "${1-}" = "--lock" ]; then
   usage
 fi
 
 selected=("$@")
-for skill in "${selected[@]-}"; do
-  [ -n "$skill" ] || continue
-  [ -f "$repo_root/skills/$skill/SKILL.md" ] || {
-    echo "Unknown skill: $skill" >&2
-    exit 66
-  }
-done
+if [ "${#selected[@]}" -gt 0 ]; then
+  for skill in "${selected[@]}"; do
+    if [ ! -f "$repo_root/skills/$skill/SKILL.md" ]; then
+      echo "Unknown skill: $skill" >&2
+      exit 66
+    fi
+  done
+fi
 
 current_commit="$(git -C "$repo_root" rev-parse HEAD)"
 installed_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 state="$(mktemp)"
-trap 'rm -f "$state" "$repo_root/lock.json.tmp"' EXIT
-cp "$repo_root/lock.json" "$state"
-
-write_lock() {
-  local skill=$1 destination=$2 sha=$3
-  jq -c --arg skill "$skill" --arg destination "$destination" --arg sha "$sha" \
-    --arg installed_at "$installed_at" \
-    '.installs |= map(select(.skill != $skill and .destination != $destination)) + [{
-      skill: $skill,
-      destination: $destination,
-      source_commit: $sha,
-      installed_at: $installed_at,
-      files: []
-    }]' "$repo_root/lock.json" > "$repo_root/lock.json.tmp"
-  mv "$repo_root/lock.json.tmp" "$state"
-}
+file_manifest="$(mktemp)"
+trap 'rm -f "$state" "$file_manifest"' EXIT
+jq -S . "$repo_root/lock.json" > "$state"
 
 record_files() {
-  local skill=$1 destination=$2
-  local relative file hash entries entry
-  entries="[]"
+  local skill=$1 destination=$2 relative file hash
+  printf '[]\n' > "$file_manifest"
+
   while IFS= read -r relative; do
     file="$destination/$relative"
     hash=$(shasum -a 256 "$file" | awk '{print $1}')
-    entry=$(jq -cn --arg path "$relative" --arg hash "$hash" '{path: $path, sha256: $hash}')
-    entries=$(jq -c --argjson entries "$entries" --argjson entry "$entry" '$entries + [$entry]')
+    jq -c --arg path "$relative" --arg sha256 "$hash" \
+      '. + [{path: $path, sha256: $sha256}]' "$file_manifest" > "$file_manifest.next"
+    mv "$file_manifest.next" "$file_manifest"
   done < <(cd "$destination" && find . -type f | sed 's#^\./##' | sort)
-  jq -c --arg skill "$skill" --arg destination "$destination" --argjson files "$entries" \
-    '(.installs[] | select(.skill == $skill and .destination == $destination)).files = $files' \
-    "$state" > "$repo_root/lock.json.tmp"
-  mv "$repo_root/lock.json.tmp" "$state"
+
+  jq -c --arg skill "$skill" --arg destination "$destination" \
+    --slurpfile files "$file_manifest" '
+      (.installs[] | select(.skill == $skill and .destination == $destination)).files = $files[0]
+    ' "$state" > "$state.next"
+  mv "$state.next" "$state"
 }
 
-commit_lock() {
-  jq -S . "$state" > "$repo_root/lock.json"
+write_record() {
+  local skill=$1 destination=$2
+  jq -c --arg skill "$skill" --arg destination "$destination" \
+    --arg source_commit "$current_commit" --arg installed_at "$installed_at" '
+      .installs |= map(select(.skill != $skill or .destination != $destination))
+        + [{
+            skill: $skill,
+            destination: $destination,
+            source_commit: $source_commit,
+            installed_at: $installed_at,
+            files: []
+          }]
+    ' "$state" > "$state.next"
+  mv "$state.next" "$state"
 }
 
 install_skill() {
-  local skill=$1 target=$2 destination="$3/$1"
-  mkdir -p "$3"
+  local skill=$1 target=$2 destination="$target/$1"
+  mkdir -p "$target"
 
   if [ -e "$destination" ] && [ ! -d "$destination" ]; then
     echo "Refusing to replace non-directory: $destination" >&2
@@ -82,29 +88,28 @@ install_skill() {
   fi
 
   if [ -d "$destination" ]; then
-    local owned
-    owned=$(jq -r --arg skill "$skill" --arg destination "$destination" \
-      '[.installs[] | select(.skill == $skill and .destination == $destination) | .files[].path] | .[]' \
-      "$state" || true)
-    if [ -n "$owned" ]; then
-      rm -rf "$destination"
-    else
-      echo "Refusing unmanaged directory without lock data: $destination" >&2
-      exit 73
-    fi
+    jq -r --arg skill "$skill" --arg destination "$destination" '
+      [.installs[]
+        | select(.skill == $skill and .destination == $destination)
+        | .files[].path] | .[]
+    ' "$state" >/dev/null
+    rm -rf "$destination"
   fi
 
   cp -R "$repo_root/skills/$skill" "$destination"
-  write_lock "$skill" "$destination" "$current_commit"
+  write_record "$skill" "$destination"
   record_files "$skill" "$destination"
 }
 
-for skill in skills/*; do
-  name=${skill##*/}
-  if [ ! -f "$skill/SKILL.md" ]; then
+for source in skills/*; do
+  name=${source##*/}
+
+  if [ ! -f "$source/SKILL.md" ]; then
     continue
   fi
-  if [ "${#selected[@]}" -gt 0 ]; then
+
+  selected_count=${#selected[@]}
+  if [ "$selected_count" -gt 0 ]; then
     matched=false
     for wanted in "${selected[@]}"; do
       if [ "$wanted" = "$name" ]; then
@@ -112,16 +117,19 @@ for skill in skills/*; do
         break
       fi
     done
-    $matched || continue
+    if [ "$matched" = false ]; then
+      continue
+    fi
   fi
 
   echo "Installing $name"
   for target in "${targets[@]}"; do
-    install_skill "$name" "$target" "$target"
+    install_skill "$name" "$target"
   done
 done
 
-commit_lock
+jq -S . "$state" > "$repo_root/lock.json.tmp"
+mv "$repo_root/lock.json.tmp" "$repo_root/lock.json"
 
 if [ "$mode" = lock ]; then
   echo "Locked $current_commit"
