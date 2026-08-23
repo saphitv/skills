@@ -97,6 +97,10 @@ install_skill() {
   fi
 
   cp -R "$repo_root/skills/$skill" "$destination"
+  find "$destination" -type f -exec chmod u+rw,go+r {} +
+  while IFS= read -r executable; do
+    chmod u+rwx,go+rx "$executable"
+  done < <(find "$destination" -type f -perm +111)
   write_record "$skill" "$destination"
   record_files "$skill" "$destination"
 }

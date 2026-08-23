@@ -1,0 +1,4 @@
+interface:
+  display_name: "Upload File"
+  short_description: "Upload a file and return a browser-view URL"
+  default_prompt: "Use $upload-file to upload this file and return its clickable browser-view URL."
