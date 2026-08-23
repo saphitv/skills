@@ -2,6 +2,15 @@
 
 Personal Codex and Claude Code skills. This repository is the source of truth; the installer publishes active skills into each agent account.
 
+## Credits
+
+This collection includes skills from, and adaptations inspired by:
+
+- [Matt Pocock's Skills for Real Engineers](https://github.com/mattpocock/skills)
+- [Lauren Tan (`@poteto`)'s pstack plugin for Cursor](https://github.com/cursor/plugins/tree/main/pstack)
+
+Credit for the original work belongs to their respective authors and contributors.
+
 ## Skill lifecycle
 
 ```text
