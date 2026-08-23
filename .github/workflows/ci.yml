@@ -9,9 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - run: shellcheck scripts/install.sh
+      - run: bash -n scripts/install.sh tests/install_test.sh
+      - run: shellcheck scripts/install.sh tests/install_test.sh
+      - run: ./tests/install_test.sh
       - run: |
           while IFS= read -r -d '' skill_md; do
             dir=${skill_md%/*}
-            test "$(basename "$dir")" = "$(jq -r .name "$skill_md")"
-          done < <(find skills -mindepth 2 -maxdepth 2 -name SKILL.md -print0)
+            declared_name=$(sed -n '2s/^name:[[:space:]]*//p' "$skill_md")
+            test "$(basename "$dir")" = "$declared_name"
+          done < <(find skills -mindepth 3 -maxdepth 3 -name SKILL.md -print0)
