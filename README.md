@@ -7,6 +7,7 @@ Personal Codex and Claude Code skills. This repository is the source of truth; t
 This collection includes skills from, and adaptations inspired by:
 
 - [Matt Pocock's Skills for Real Engineers](https://github.com/mattpocock/skills)
+- [hani-q/qstack's PR babysitting skill](https://github.com/hani-q/qstack/tree/main/skills/qstack-babysit-pr), adapted from Theo Browne's skill
 - [Lauren Tan (`@poteto`)'s pstack plugin for Cursor](https://github.com/cursor/plugins/tree/main/pstack)
 
 Credit for the original work belongs to their respective authors and contributors.
@@ -107,3 +108,13 @@ The installer can be invoked from any working directory. Replacements are prepar
 ## Security
 
 Skills can influence agent behavior and may include executable files or tool permissions. Review every changed skill, script, frontmatter permission, dependency, and hook like code. Never place credentials, tokens, session logs, browser state, or local settings in this repository.
+
+## Installed pstack skills
+
+The pstack additions come from `cursor/plugins` commit `23e4138daa01c42d4969f7a5465f82704e64f798`. The requested skills are `technical-writing`, `how`, `interrogate`, `blast-radius`, `tdd`, and `typescript-best-practices`. Companions include `why`, `arena`, and the principle skills those workflows reference.
+
+`how`, `why`, `interrogate`, and `arena` use the current harness and live model catalog, with T3 delegation support. They no longer depend on Cursor's Task tool, fixed model slugs, or `pstack-models.mdc`. Multi-model review defaults to two available models. Interrogate remains explicitly invoked in Codex and Claude Code and returns a verdict without applying fixes. Other additions retain automatic discovery for their stated tasks. Unslop also remains automatic.
+
+The archived Matt Pocock TDD skill lives in `skills/archived/matt-pocock-tdd/` to distinguish it from the active pstack `tdd` skill. Its original files are unchanged.
+
+For a complete feature workflow, ask the agent to implement and verify the change, run interrogate and fix confirmed findings, then open the PR and babysit CI and reviews. These steps run together only when requested; they do not imply permission to merge.
