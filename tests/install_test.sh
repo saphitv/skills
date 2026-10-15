@@ -108,6 +108,12 @@ assert_contains "$prune_output" "Removed Claude/unslop"
 [ -d "$test_root/codex/skills/upload-file" ] || fail "prune removed an active skill"
 mv "$test_root/repo/skills/disabled/unslop" "$test_root/repo/skills/active/unslop"
 
+# Simulate an existing managed qstack installation before the profile migrates.
+mv "$test_root/repo/skills/archived/qstack-babysit-pr" "$test_root/repo/skills/active/qstack-babysit-pr"
+install_output="$(run_installer qstack-babysit-pr 2>&1)"
+assert_contains "$install_output" "Installed 1 active skill(s)"
+mv "$test_root/repo/skills/active/qstack-babysit-pr" "$test_root/repo/skills/archived/qstack-babysit-pr"
+
 # The default profile installs the maintained selection in both accounts.
 install_output="$(run_installer 2>&1)"
 assert_contains "$install_output" "Installed 18 active skill(s)"
@@ -120,23 +126,30 @@ for account in codex claude; do
 done
 status_output="$(run_installer status 2>&1)"
 assert_contains "$status_output" "Active skills (profile: current)"
-assert_contains "$status_output" "CURRENT    Codex/qstack-babysit-pr"
+assert_contains "$status_output" "CURRENT    Codex/pstack-babysit-pr"
+assert_contains "$status_output" "STALE      Codex/qstack-babysit-pr (archived)"
+assert_contains "$status_output" "STALE      Claude/qstack-babysit-pr (archived)"
+prune_output="$(run_installer prune --yes 2>&1)"
+assert_contains "$prune_output" "Removed Codex/qstack-babysit-pr"
+for account in codex claude; do
+  [ ! -e "$test_root/$account/skills/qstack-babysit-pr" ] || fail "archive prune retained qstack"
+  [ -f "$test_root/$account/skills/pstack-babysit-pr/references/review-triage.md" ] ||
+    fail "replacement babysitter lost its triage reference"
+done
 
 # Profile installation reports existing extras, but only prune removes them.
 install_output="$(run_installer install --profile pstack 2>&1)"
-assert_contains "$install_output" "Installed 16 active skill(s)"
-[ -f "$test_root/codex/skills/qstack-babysit-pr/SKILL.md" ] || fail "profile install removed an extra"
+assert_contains "$install_output" "Installed 17 active skill(s)"
+[ -f "$test_root/codex/skills/upload-file/SKILL.md" ] || fail "profile install removed an extra"
 status_output="$(run_installer status --profile pstack 2>&1)"
 assert_contains "$status_output" "Active skills (profile: pstack)"
-assert_contains "$status_output" "STALE      Codex/qstack-babysit-pr (outside profile pstack)"
+assert_contains "$status_output" "CURRENT    Codex/pstack-babysit-pr"
 assert_contains "$status_output" "STALE      Claude/upload-file (outside profile pstack)"
 assert_contains "$status_output" "prune --profile pstack"
 prune_output="$(run_installer prune --profile pstack --yes 2>&1)"
-assert_contains "$prune_output" "Removed Codex/qstack-babysit-pr"
+assert_contains "$prune_output" "Removed Codex/upload-file"
 for account in codex claude; do
-  for extra in qstack-babysit-pr upload-file; do
-    [ ! -e "$test_root/$account/skills/$extra" ] || fail "profile prune retained $account/$extra"
-  done
+  [ ! -e "$test_root/$account/skills/upload-file" ] || fail "profile prune retained $account/upload-file"
   [ -f "$test_root/$account/skills/interrogate/SKILL.md" ] || fail "profile prune removed interrogate"
   grep -q 'allow_implicit_invocation: false' "$test_root/$account/skills/interrogate/agents/openai.yaml" ||
     fail "profile installation changed manual invocation"

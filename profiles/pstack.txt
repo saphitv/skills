@@ -9,6 +9,7 @@ principle-prove-it-works
 principle-redesign-from-first-principles
 principle-separate-before-serializing-shared-state
 principle-type-system-discipline
+pstack-babysit-pr
 tdd
 technical-writing
 typescript-best-practices

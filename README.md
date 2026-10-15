@@ -4,7 +4,7 @@ Personal Codex and Claude Code skills. This repository is the source of truth; t
 
 ## Profiles
 
-[`profiles/default`](profiles/default) selects `current`, which contains 18 active repo-managed skills. [`profiles/current.txt`](profiles/current.txt) lists their exact names. [`profiles/pstack.txt`](profiles/pstack.txt) selects only the 16 installed pstack skills and companions. It is the installed subset, not the entire upstream pstack plugin.
+[`profiles/default`](profiles/default) selects `current`, which contains 18 active repo-managed skills. [`profiles/current.txt`](profiles/current.txt) lists their exact names. [`profiles/pstack.txt`](profiles/pstack.txt) selects the 17 pstack skills and companions, including a standalone adaptation of its Babysit playbook. It is the selected subset, not the entire upstream pstack plugin.
 
 With no skill names or profile option, installation, status, and pruning use the default profile:
 
@@ -41,7 +41,7 @@ The `current` profile contains these 18 skills. Automatic discovery means the ag
 | `principle-redesign-from-first-principles` | Integrate new requirements into the design. |
 | `principle-separate-before-serializing-shared-state` | Separate concurrent writers where possible. |
 | `principle-type-system-discipline` | Use types to prevent invalid states. |
-| `qstack-babysit-pr` | Watch an existing PR through CI and review feedback. |
+| `pstack-babysit-pr` | Drive a PR or stack to merge-ready using pstack's review and CI workflow. |
 | `tdd` | Demonstrate a failing test before a fix when requested or locally practical. |
 | `technical-writing` | Write and review technical documentation. |
 | `typescript-best-practices` | Apply TypeScript modeling and coding guidance. |
@@ -49,10 +49,9 @@ The `current` profile contains these 18 skills. Automatic discovery means the ag
 | `upload-file` | Publish a file when URL sharing is requested. |
 | `why` | Investigate design decisions using historical evidence. |
 
-All entries except `qstack-babysit-pr` and `upload-file` belong to the `pstack` profile. The extras have these origins:
+All entries except `upload-file` belong to the `pstack` profile. `upload-file` is an existing repository utility retained in `current` for file sharing.
 
-- `qstack-babysit-pr` comes from [hani-q/qstack](https://github.com/hani-q/qstack/tree/main/skills/qstack-babysit-pr), adapted from Theo Browne's workflow. Current upstream pstack also has a [Babysit playbook inside `poteto-mode`](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/babysit.md). That playbook is not included in this repo's installed subset.
-- `upload-file` is an existing repository utility, retained in `current` for file sharing.
+`qstack-babysit-pr`, from [hani-q/qstack](https://github.com/hani-q/qstack/tree/main/skills/qstack-babysit-pr) and adapted from Theo Browne's workflow, is archived. Its replacement, `pstack-babysit-pr`, is included in both profiles.
 
 `resolving-merge-conflicts` from the older Matt Pocock collection is archived and excluded from both profiles. [Upstream has also archived it](https://github.com/mattpocock/skills/blob/main/docs/engineering/resolving-merge-conflicts.md).
 
@@ -60,7 +59,7 @@ Before archiving a companion, check its callers. TypeScript guidance references 
 
 `diagnose-crash`, `omarchy`, and built-in agent skills are supplied separately and are outside these profiles. Use installer status to inspect actual installations. The inventory describes repository selection, not usage frequency.
 
-There is one disabled skill, `explain-diff-html`, and 35 archived skills. List the current collections with:
+There is one disabled skill, `explain-diff-html`, and 36 archived skills. List the current collections with:
 
 ```sh
 rg --files skills -g SKILL.md | sort
@@ -178,6 +177,10 @@ Skills can influence agent behavior and may include executable files or tool per
 ## Installed pstack skills
 
 The pstack additions come from `cursor/plugins` commit `23e4138daa01c42d4969f7a5465f82704e64f798`. The requested skills are `technical-writing`, `how`, `interrogate`, `blast-radius`, `tdd`, and `typescript-best-practices`. Companions include `why`, `arena`, and the principle skills those workflows reference.
+
+`pstack-babysit-pr` is adapted separately from the [Babysit playbook](https://github.com/cursor/plugins/blob/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack/skills/poteto-mode/playbooks/babysit.md) and its review-triage rubric at commit `99743e9c151c8537cbbf1f98bb38f34ef3368453`. It supports one-pass status, review-only work, background monitoring, and driving a PR or stack to merge-ready. Stack work proceeds from the lowest unmerged PR upward. Babysitting leaves rebases to the branch owner and does not authorize merging.
+
+In T3, the adapted skill uses `watch_pull_request`, yields while waiting, and stops its watches before handing work back. Outside T3, it uses available host monitoring. It does not require Cursor's `/loop`, the upstream watcher executable, or the rest of `poteto-mode`. Use it with requests such as "babysit this PR", "check on PR X", or "address the review comments". It starts when requested, not merely when a PR opens.
 
 `how`, `why`, `interrogate`, and `arena` use the current harness and live model catalog, with T3 delegation support. They no longer depend on Cursor's Task tool, fixed model slugs, or `pstack-models.mdc`. Multi-model review defaults to two available models. Interrogate remains explicitly invoked in Codex and Claude Code and returns a verdict without applying fixes. Other additions retain automatic discovery for their stated tasks. Unslop also remains automatic.
 
