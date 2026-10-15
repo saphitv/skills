@@ -5,15 +5,18 @@ usage() {
   local status=${1:-64}
   cat >&2 <<'EOF'
 Usage:
-  ./scripts/install.sh [install] [skill ...]
-  ./scripts/install.sh status [skill ...]
-  ./scripts/install.sh prune [--yes]
+  ./scripts/install.sh [install] [--profile name | skill ...]
+  ./scripts/install.sh status [--profile name | skill ...]
+  ./scripts/install.sh prune [--profile name] [--yes]
 
 Commands:
-  install  Replace active skills in both agent accounts (default).
+  install  Replace the profile's skills in both agent accounts (default).
   status   Report missing, outdated, stale, and unmanaged skills.
-  prune    Remove installed skills that this installer manages but that are
-           no longer active. Prompts unless --yes is supplied.
+  prune    Remove installed skills managed by this installer that are
+           outside the profile. Prompts unless --yes is supplied.
+
+The default profile is read from profiles/default. Use --profile all for
+every skill in skills/active. Explicit skill names override the default profile.
 EOF
   exit "$status"
 }
@@ -23,6 +26,7 @@ skills_root="$repo_root/skills"
 active_dir="$skills_root/active"
 disabled_dir="$skills_root/disabled"
 archived_dir="$skills_root/archived"
+profiles_dir="$repo_root/profiles"
 codex_home="${CODEX_HOME:-$HOME/.codex}"
 claude_config_dir="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 targets=("$codex_home/skills" "$claude_config_dir/skills")
@@ -30,6 +34,8 @@ target_labels=(Codex Claude)
 lock_file="$repo_root/.agent-skills.lock.json"
 action=install
 assume_yes=false
+profile=
+selected=()
 
 case "${1-}" in
   install)
@@ -52,17 +58,32 @@ case "${1-}" in
     ;;
 esac
 
-if [ "$action" = prune ]; then
-  case "${1-}" in
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --profile)
+      if [ "$#" -lt 2 ] || [ -n "$profile" ]; then
+        usage
+      fi
+      profile=$2
+      [ -n "$profile" ] || usage
+      shift 2
+      ;;
     --yes)
+      [ "$action" = prune ] || usage
       assume_yes=true
       shift
       ;;
+    -*)
+      usage
+      ;;
+    *)
+      [ "$action" != prune ] || usage
+      selected+=("$1")
+      shift
+      ;;
   esac
-  if [ "$#" -ne 0 ]; then
-    usage
-  fi
-fi
+done
+[ -z "$profile" ] || [ "${#selected[@]}" -eq 0 ] || usage
 
 for command_name in git jq find chmod cp mv mktemp; do
   if ! command -v "$command_name" >/dev/null 2>&1; then
@@ -174,7 +195,6 @@ validate_layout() {
 
 validate_layout
 
-selected=("$@")
 if [ "${#selected[@]}" -gt 0 ]; then
   for skill in "${selected[@]}"; do
     validate_skill_name "$skill"
@@ -183,6 +203,44 @@ if [ "${#selected[@]}" -gt 0 ]; then
       exit 66
     fi
   done
+else
+  if [ -z "$profile" ]; then
+    if [ ! -f "$profiles_dir/default" ]; then
+      echo "Missing default profile: $profiles_dir/default" >&2
+      exit 66
+    fi
+    profile=$(cat "$profiles_dir/default")
+  fi
+  validate_skill_name "$profile"
+  if [ "$profile" != all ]; then
+    profile_file="$profiles_dir/$profile.txt"
+    if [ ! -f "$profile_file" ]; then
+      echo "Unknown profile: $profile" >&2
+      exit 66
+    fi
+    active_skills=()
+    while IFS= read -r skill || [ -n "$skill" ]; do
+      case "$skill" in
+        ''|'#'*) continue ;;
+      esac
+      validate_skill_name "$skill"
+      if [ ! -f "$active_dir/$skill/SKILL.md" ]; then
+        echo "Profile $profile references an unavailable active skill: $skill" >&2
+        exit 66
+      fi
+      for existing in "${active_skills[@]}"; do
+        if [ "$existing" = "$skill" ]; then
+          echo "Duplicate skill in profile $profile: $skill" >&2
+          exit 65
+        fi
+      done
+      active_skills+=("$skill")
+    done < "$profile_file"
+    if [ "${#active_skills[@]}" -eq 0 ]; then
+      echo "Profile $profile has no skills." >&2
+      exit 65
+    fi
+  fi
 fi
 
 is_selected() {
@@ -199,8 +257,11 @@ is_selected() {
 }
 
 is_active() {
-  local skill=$1
-  [ -f "$active_dir/$skill/SKILL.md" ]
+  local skill=$1 active
+  for active in "${active_skills[@]}"; do
+    [ "$active" != "$skill" ] || return 0
+  done
+  return 1
 }
 
 path_exists() {
@@ -218,7 +279,9 @@ is_managed() {
 
 inactive_collection() {
   local skill=$1
-  if [ -f "$disabled_dir/$skill/SKILL.md" ]; then
+  if [ -f "$active_dir/$skill/SKILL.md" ]; then
+    printf 'outside profile %s' "$profile"
+  elif [ -f "$disabled_dir/$skill/SKILL.md" ]; then
     printf 'disabled'
   elif [ -f "$archived_dir/$skill/SKILL.md" ]; then
     printf 'archived'
@@ -387,7 +450,7 @@ warn_inactive_installations() {
         ownership=managed
       fi
       echo "Warning: $label/$skill is installed but $collection ($ownership)." >&2
-    done < <(find "$target" -mindepth 1 -maxdepth 1 ! -name '.*' -print0)
+    done < <(find -H "$target" -mindepth 1 -maxdepth 1 ! -name '.*' -print0)
   done
 }
 
@@ -395,7 +458,11 @@ show_status() {
   local skill index target label destination managed_note collection ownership
   local inactive_found=false
 
-  echo "Active skills"
+  if [ -n "$profile" ]; then
+    echo "Active skills (profile: $profile)"
+  else
+    echo "Active skills (explicit selection)"
+  fi
   for skill in "${active_skills[@]}"; do
     is_selected "$skill" || continue
     build_manifest "$active_dir/$skill" "$source_manifest"
@@ -426,7 +493,7 @@ show_status() {
   done
 
   echo
-  echo "Installed skills not in active"
+  echo "Installed skills outside the profile or active collection"
   for index in "${!targets[@]}"; do
     target=${targets[$index]}
     label=${target_labels[$index]}
@@ -441,14 +508,14 @@ show_status() {
         ownership=STALE
       fi
       printf '  %-10s %s/%s (%s)\n' "$ownership" "$label" "$skill" "$collection"
-    done < <(find "$target" -mindepth 1 -maxdepth 1 ! -name '.*' -print0)
+    done < <(find -H "$target" -mindepth 1 -maxdepth 1 ! -name '.*' -print0)
   done
   if [ "$inactive_found" = false ]; then
     echo "  None"
   fi
 
   echo
-  echo "STALE entries can be removed with: ./scripts/install.sh prune"
+  printf 'STALE entries can be removed with: ./scripts/install.sh prune --profile %s\n' "${profile:-all}"
   echo "UNMANAGED entries are never removed automatically."
 }
 
@@ -475,7 +542,7 @@ prune_stale() {
         prune_targets+=("$target")
         prune_labels+=("$label")
       fi
-    done < <(find "$target" -mindepth 1 -maxdepth 1 ! -name '.*' -print0)
+    done < <(find -H "$target" -mindepth 1 -maxdepth 1 ! -name '.*' -print0)
   done
 
   if [ "${#prune_destinations[@]}" -eq 0 ]; then

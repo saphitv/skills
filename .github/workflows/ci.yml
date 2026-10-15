@@ -16,5 +16,9 @@ jobs:
           while IFS= read -r -d '' skill_md; do
             dir=${skill_md%/*}
             declared_name=$(sed -n '2s/^name:[[:space:]]*//p' "$skill_md")
+            # Preserve the upstream name in the renamed legacy TDD archive.
+            if [ "$dir" = skills/archived/matt-pocock-tdd ] && [ "$declared_name" = tdd ]; then
+              continue
+            fi
             test "$(basename "$dir")" = "$declared_name"
           done < <(find skills -mindepth 3 -maxdepth 3 -name SKILL.md -print0)
