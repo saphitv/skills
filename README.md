@@ -4,7 +4,7 @@ Personal Codex and Claude Code skills. This repository is the source of truth; t
 
 ## Profiles
 
-[`profiles/default`](profiles/default) selects `current`, which preserves all 19 repo-managed skills from the existing setup. [`profiles/current.txt`](profiles/current.txt) lists their exact names. [`profiles/pstack.txt`](profiles/pstack.txt) selects only the 16 installed pstack skills and companions. It is the installed subset, not the entire upstream pstack plugin.
+[`profiles/default`](profiles/default) selects `current`, which contains 18 active repo-managed skills. [`profiles/current.txt`](profiles/current.txt) lists their exact names. [`profiles/pstack.txt`](profiles/pstack.txt) selects only the 16 installed pstack skills and companions. It is the installed subset, not the entire upstream pstack plugin.
 
 With no skill names or profile option, installation, status, and pruning use the default profile:
 
@@ -26,7 +26,7 @@ A profile contains one active skill name per line. Blank lines and lines startin
 
 ## Current skill inventory
 
-The `current` profile contains these 19 skills. Automatic discovery means the agent can select a skill when its task matches. It does not mean every skill runs on every turn. `interrogate` requires an explicit request in both Codex and Claude Code.
+The `current` profile contains these 18 skills. Automatic discovery means the agent can select a skill when its task matches. It does not mean every skill runs on every turn. `interrogate` requires an explicit request in both Codex and Claude Code.
 
 | Skill | Purpose |
 | --- | --- |
@@ -42,7 +42,6 @@ The `current` profile contains these 19 skills. Automatic discovery means the ag
 | `principle-separate-before-serializing-shared-state` | Separate concurrent writers where possible. |
 | `principle-type-system-discipline` | Use types to prevent invalid states. |
 | `qstack-babysit-pr` | Watch an existing PR through CI and review feedback. |
-| `resolving-merge-conflicts` | Resolve an in-progress merge or rebase and run checks. |
 | `tdd` | Demonstrate a failing test before a fix when requested or locally practical. |
 | `technical-writing` | Write and review technical documentation. |
 | `typescript-best-practices` | Apply TypeScript modeling and coding guidance. |
@@ -50,17 +49,18 @@ The `current` profile contains these 19 skills. Automatic discovery means the ag
 | `upload-file` | Publish a file when URL sharing is requested. |
 | `why` | Investigate design decisions using historical evidence. |
 
-All entries except `qstack-babysit-pr`, `resolving-merge-conflicts`, and `upload-file` belong to the `pstack` profile. The extras have these origins:
+All entries except `qstack-babysit-pr` and `upload-file` belong to the `pstack` profile. The extras have these origins:
 
 - `qstack-babysit-pr` comes from [hani-q/qstack](https://github.com/hani-q/qstack/tree/main/skills/qstack-babysit-pr), adapted from Theo Browne's workflow. Current upstream pstack also has a [Babysit playbook inside `poteto-mode`](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/babysit.md). That playbook is not included in this repo's installed subset.
-- `resolving-merge-conflicts` was retained from the older Matt Pocock collection. [Upstream has archived it](https://github.com/mattpocock/skills/blob/main/docs/engineering/resolving-merge-conflicts.md). It remains in `current` to preserve the existing setup.
 - `upload-file` is an existing repository utility, retained in `current` for file sharing.
+
+`resolving-merge-conflicts` from the older Matt Pocock collection is archived and excluded from both profiles. [Upstream has also archived it](https://github.com/mattpocock/skills/blob/main/docs/engineering/resolving-merge-conflicts.md).
 
 Before archiving a companion, check its callers. TypeScript guidance references type-system and boundary discipline. Type-system discipline also references encoding lessons in structure. Arena references separation of shared state, laziness, redesign, and verification. Technical writing references unslop. Blast radius references how, why, and arena.
 
 `diagnose-crash`, `omarchy`, and built-in agent skills are supplied separately and are outside these profiles. Use installer status to inspect actual installations. The inventory describes repository selection, not usage frequency.
 
-There is one disabled skill, `explain-diff-html`, and 34 archived skills. List the current collections with:
+There is one disabled skill, `explain-diff-html`, and 35 archived skills. List the current collections with:
 
 ```sh
 rg --files skills -g SKILL.md | sort

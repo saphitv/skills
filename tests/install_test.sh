@@ -108,9 +108,9 @@ assert_contains "$prune_output" "Removed Claude/unslop"
 [ -d "$test_root/codex/skills/upload-file" ] || fail "prune removed an active skill"
 mv "$test_root/repo/skills/disabled/unslop" "$test_root/repo/skills/active/unslop"
 
-# The default profile reproduces the existing selection in both accounts.
+# The default profile installs the maintained selection in both accounts.
 install_output="$(run_installer 2>&1)"
-assert_contains "$install_output" "Installed 19 active skill(s)"
+assert_contains "$install_output" "Installed 18 active skill(s)"
 for account in codex claude; do
   while IFS= read -r skill; do
     [ -f "$test_root/$account/skills/$skill/SKILL.md" ] || fail "default profile omitted $account/$skill"
@@ -129,12 +129,12 @@ assert_contains "$install_output" "Installed 16 active skill(s)"
 status_output="$(run_installer status --profile pstack 2>&1)"
 assert_contains "$status_output" "Active skills (profile: pstack)"
 assert_contains "$status_output" "STALE      Codex/qstack-babysit-pr (outside profile pstack)"
-assert_contains "$status_output" "STALE      Claude/resolving-merge-conflicts (outside profile pstack)"
+assert_contains "$status_output" "STALE      Claude/upload-file (outside profile pstack)"
 assert_contains "$status_output" "prune --profile pstack"
 prune_output="$(run_installer prune --profile pstack --yes 2>&1)"
 assert_contains "$prune_output" "Removed Codex/qstack-babysit-pr"
 for account in codex claude; do
-  for extra in qstack-babysit-pr resolving-merge-conflicts upload-file; do
+  for extra in qstack-babysit-pr upload-file; do
     [ ! -e "$test_root/$account/skills/$extra" ] || fail "profile prune retained $account/$extra"
   done
   [ -f "$test_root/$account/skills/interrogate/SKILL.md" ] || fail "profile prune removed interrogate"
