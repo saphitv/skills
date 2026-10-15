@@ -1,5 +1,6 @@
 arena
 blast-radius
+correct
 how
 interrogate
 principle-boundary-discipline
@@ -10,6 +11,7 @@ principle-redesign-from-first-principles
 principle-separate-before-serializing-shared-state
 principle-type-system-discipline
 pstack-babysit-pr
+reflect
 tdd
 technical-writing
 typescript-best-practices

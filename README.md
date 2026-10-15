@@ -4,7 +4,7 @@ Personal Codex and Claude Code skills. This repository is the source of truth; t
 
 ## Profiles
 
-[`profiles/default`](profiles/default) selects `current`, which contains 18 active repo-managed skills. [`profiles/current.txt`](profiles/current.txt) lists their exact names. [`profiles/pstack.txt`](profiles/pstack.txt) selects the 17 pstack skills and companions, including a standalone adaptation of its Babysit playbook. It is the selected subset, not the entire upstream pstack plugin.
+[`profiles/default`](profiles/default) selects `current`, which contains 20 active repo-managed skills. [`profiles/current.txt`](profiles/current.txt) lists their exact names. [`profiles/pstack.txt`](profiles/pstack.txt) selects the 19 pstack and P3 skills and companions, including standalone babysitting and session-review workflows. It is the selected subset, not the entire upstream pstack or P3 plugin.
 
 With no skill names or profile option, installation, status, and pruning use the default profile:
 
@@ -26,12 +26,13 @@ A profile contains one active skill name per line. Blank lines and lines startin
 
 ## Current skill inventory
 
-The `current` profile contains these 18 skills. Automatic discovery means the agent can select a skill when its task matches. It does not mean every skill runs on every turn. `interrogate` requires an explicit request in both Codex and Claude Code.
+The `current` profile contains these 20 skills. Automatic discovery means the agent can select a skill when its task matches. It does not mean every skill runs on every turn. `interrogate`, `reflect`, and `correct` require an explicit request in both Codex and Claude Code.
 
 | Skill | Purpose |
 | --- | --- |
 | `arena` | Compare parallel candidate solutions and combine the strongest parts. |
 | `blast-radius` | Trace effects beyond a diff and verify concrete risks. |
+| `correct` | Prevent recurring repo mistakes through architecture, types, linting, and tests. Manual only. |
 | `how` | Explain runtime behavior and code ownership. |
 | `interrogate` | Run independent model reviews and return a verdict. Manual only. |
 | `principle-boundary-discipline` | Validate external inputs at system boundaries. |
@@ -42,6 +43,7 @@ The `current` profile contains these 18 skills. Automatic discovery means the ag
 | `principle-separate-before-serializing-shared-state` | Separate concurrent writers where possible. |
 | `principle-type-system-discipline` | Use types to prevent invalid states. |
 | `pstack-babysit-pr` | Drive a PR or stack to merge-ready using pstack's review and CI workflow. |
+| `reflect` | Review a session and propose durable skill improvements. Manual only. |
 | `tdd` | Demonstrate a failing test before a fix when requested or locally practical. |
 | `technical-writing` | Write and review technical documentation. |
 | `typescript-best-practices` | Apply TypeScript modeling and coding guidance. |
@@ -50,6 +52,10 @@ The `current` profile contains these 18 skills. Automatic discovery means the ag
 | `why` | Investigate design decisions using historical evidence. |
 
 All entries except `upload-file` belong to the `pstack` profile. `upload-file` is an existing repository utility retained in `current` for file sharing.
+
+After a substantial session with reusable lessons, ask "Use reflect to review this session." Reflection uses three reviewer lenses and a synthesizer, then presents proposed skill edits for approval. It does not automatically change skills or file backlog issues. Chat length alone is not a reason to run it.
+
+Use "Run correct on the recurring mistakes in this repo" when you want repository fixes that prevent a demonstrated class of mistakes. `correct` is manual-only, as in P3 upstream. The automatic `principle-encode-lessons-in-structure` guidance remains available during ordinary work; it does not start the full `correct` audit on every correction.
 
 `qstack-babysit-pr`, from [hani-q/qstack](https://github.com/hani-q/qstack/tree/main/skills/qstack-babysit-pr) and adapted from Theo Browne's workflow, is archived. Its replacement, `pstack-babysit-pr`, is included in both profiles.
 
@@ -72,6 +78,7 @@ This collection includes skills from, and adaptations inspired by:
 - [Matt Pocock's Skills for Real Engineers](https://github.com/mattpocock/skills)
 - [hani-q/qstack's PR babysitting skill](https://github.com/hani-q/qstack/tree/main/skills/qstack-babysit-pr), adapted from Theo Browne's skill
 - [Lauren Tan (`@poteto`)'s pstack plugin for Cursor](https://github.com/cursor/plugins/tree/main/pstack)
+- [Uzair Ansar's P3 Stack](https://github.com/uzairansaruzi/p3-stack), the T3 Code port of pstack
 
 Credit for the original work belongs to their respective authors and contributors.
 
@@ -174,9 +181,11 @@ On another machine, pull the committed repo update, then run `./scripts/install.
 
 Skills can influence agent behavior and may include executable files or tool permissions. Review every changed skill, script, frontmatter permission, dependency, and hook like code. Never place credentials, tokens, session logs, browser state, or local settings in this repository.
 
-## Installed pstack skills
+## Pstack and P3 sources
 
 The pstack additions come from `cursor/plugins` commit `23e4138daa01c42d4969f7a5465f82704e64f798`. The requested skills are `technical-writing`, `how`, `interrogate`, `blast-radius`, `tdd`, and `typescript-best-practices`. Companions include `why`, `arena`, and the principle skills those workflows reference.
+
+`reflect` and `correct` come from [P3 Stack](https://github.com/uzairansaruzi/p3-stack/tree/09909ebb5c0125e27fad3e57d96b81e832696d69), commit `09909ebb5c0125e27fad3e57d96b81e832696d69`. Their manual invocation policy is preserved for both agents. The selected-set adaptation lets reflection run without `setup-p3`, `p3-models.md`, or the full `p3-mode` authoring playbook. It uses live model discovery and the available skill-authoring workflow, scopes transcript reads to the requested session, and keeps external backlog filing within the user's authorization.
 
 `pstack-babysit-pr` is adapted separately from the [Babysit playbook](https://github.com/cursor/plugins/blob/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack/skills/poteto-mode/playbooks/babysit.md) and its review-triage rubric at commit `99743e9c151c8537cbbf1f98bb38f34ef3368453`. It supports one-pass status, review-only work, background monitoring, and driving a PR or stack to merge-ready. Stack work proceeds from the lowest unmerged PR upward. Babysitting leaves rebases to the branch owner and does not authorize merging.
 

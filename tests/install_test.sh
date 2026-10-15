@@ -116,7 +116,7 @@ mv "$test_root/repo/skills/active/qstack-babysit-pr" "$test_root/repo/skills/arc
 
 # The default profile installs the maintained selection in both accounts.
 install_output="$(run_installer 2>&1)"
-assert_contains "$install_output" "Installed 18 active skill(s)"
+assert_contains "$install_output" "Installed 20 active skill(s)"
 for account in codex claude; do
   while IFS= read -r skill; do
     [ -f "$test_root/$account/skills/$skill/SKILL.md" ] || fail "default profile omitted $account/$skill"
@@ -139,7 +139,7 @@ done
 
 # Profile installation reports existing extras, but only prune removes them.
 install_output="$(run_installer install --profile pstack 2>&1)"
-assert_contains "$install_output" "Installed 17 active skill(s)"
+assert_contains "$install_output" "Installed 19 active skill(s)"
 [ -f "$test_root/codex/skills/upload-file/SKILL.md" ] || fail "profile install removed an extra"
 status_output="$(run_installer status --profile pstack 2>&1)"
 assert_contains "$status_output" "Active skills (profile: pstack)"
@@ -150,9 +150,13 @@ prune_output="$(run_installer prune --profile pstack --yes 2>&1)"
 assert_contains "$prune_output" "Removed Codex/upload-file"
 for account in codex claude; do
   [ ! -e "$test_root/$account/skills/upload-file" ] || fail "profile prune retained $account/upload-file"
-  [ -f "$test_root/$account/skills/interrogate/SKILL.md" ] || fail "profile prune removed interrogate"
-  grep -q 'allow_implicit_invocation: false' "$test_root/$account/skills/interrogate/agents/openai.yaml" ||
-    fail "profile installation changed manual invocation"
+  for manual_skill in interrogate reflect correct; do
+    [ -f "$test_root/$account/skills/$manual_skill/SKILL.md" ] || fail "profile prune removed $manual_skill"
+    grep -q 'allow_implicit_invocation: false' "$test_root/$account/skills/$manual_skill/agents/openai.yaml" ||
+      fail "profile installation changed manual invocation for $manual_skill"
+    grep -q '^disable-model-invocation: true$' "$test_root/$account/skills/$manual_skill/SKILL.md" ||
+      fail "profile installation changed Claude invocation for $manual_skill"
+  done
 done
 [ -e "$test_root/codex/skills/extra-skill/user-file" ] || fail "profile prune removed an unmanaged skill"
 
