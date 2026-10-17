@@ -1,6 +1,10 @@
 ---
 name: why
 description: "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Discovers available MCPs and queries each evidence category (source control, issue tracker, long-form docs, real-time chat, infrastructure observability, error tracking, product analytics warehouse) in parallel, then returns a cited read on decisions and tradeoffs. Use how for runtime behavior."
+license: MIT
+metadata:
+  source: https://github.com/uzairansaruzi/p3-stack/tree/09909ebb5c0125e27fad3e57d96b81e832696d69/skills/why
+  upstream_commit: 09909ebb5c0125e27fad3e57d96b81e832696d69
 ---
 
 # Why
@@ -79,7 +83,7 @@ Aim for a complete **coverage map**, not a minimal one. Document the null, don't
 Launch all matching investigators in a single message so they run concurrently. Don't ask one agent to cover multiple MCPs.
 
 Subagent config (each):
-- Model: choose an available model using the delegation guidance.
+- Model: use the configured `why investigators` role when present; otherwise choose an available model using the delegation guidance.
 - Research only. No file edits or external mutations.
 
 Each investigator gets:
@@ -122,7 +126,7 @@ If your scope assessment suggests a single-commit trivial target where the PR de
 
 Spawn one synthesizer subagent:
 
-- Model: choose an available model using the delegation guidance.
+- Model: use the configured `why synthesizer` role when present; otherwise choose an available model using the delegation guidance.
 - Research only. No file edits or external mutations.
 
 The synthesizer gets:

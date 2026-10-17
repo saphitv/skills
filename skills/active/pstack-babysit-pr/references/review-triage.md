@@ -1,6 +1,6 @@
 # Review triage
 
-Adapted from pstack's [Bugbot triage rubric](https://github.com/cursor/plugins/blob/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack/skills/poteto-mode/references/bugbot-triage.md).
+Adapted from P3 Stack's [Bugbot triage rubric](https://github.com/uzairansaruzi/p3-stack/blob/09909ebb5c0125e27fad3e57d96b81e832696d69/skills/p3-mode/references/bugbot-triage.md), originally authored in pstack by Lauren Tan. Keep the local evidence checks when updating from P3.
 
 Classify each finding against the current head before changing code:
 

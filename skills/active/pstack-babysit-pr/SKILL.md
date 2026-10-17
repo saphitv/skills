@@ -4,13 +4,14 @@ description: Use when asked to babysit or monitor an existing PR or stack, get i
 license: MIT
 metadata:
   author: Lauren Tan
-  source: https://github.com/cursor/plugins/blob/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack/skills/poteto-mode/playbooks/babysit.md
-  upstream_commit: 99743e9c151c8537cbbf1f98bb38f34ef3368453
+  source: https://github.com/uzairansaruzi/p3-stack/blob/09909ebb5c0125e27fad3e57d96b81e832696d69/skills/p3-mode/playbooks/babysit.md
+  original_source: https://github.com/cursor/plugins/blob/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack/skills/poteto-mode/playbooks/babysit.md
+  upstream_commit: 09909ebb5c0125e27fad3e57d96b81e832696d69
 ---
 
 # Babysit a PR or stack
 
-Drive the lowest unmerged PR to merge-ready. Babysitting does not authorize merging. This is a standalone adaptation of pstack's Babysit playbook for T3, Codex, and Claude Code.
+Drive the lowest unmerged PR to merge-ready. Babysitting does not authorize merging. This is a standalone adaptation of P3 Stack's Babysit playbook for T3, Codex, and Claude Code, originally authored in pstack by Lauren Tan and adapted for T3 by Uzair Ansar.
 
 ## Select the mode and scope
 

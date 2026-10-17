@@ -228,12 +228,15 @@ else
         echo "Profile $profile references an unavailable active skill: $skill" >&2
         exit 66
       fi
-      for existing in "${active_skills[@]}"; do
-        if [ "$existing" = "$skill" ]; then
-          echo "Duplicate skill in profile $profile: $skill" >&2
-          exit 65
-        fi
-      done
+      # Bash 3.2 treats an empty array expansion as unbound under nounset.
+      if [ "${#active_skills[@]}" -gt 0 ]; then
+        for existing in "${active_skills[@]}"; do
+          if [ "$existing" = "$skill" ]; then
+            echo "Duplicate skill in profile $profile: $skill" >&2
+            exit 65
+          fi
+        done
+      fi
       active_skills+=("$skill")
     done < "$profile_file"
     if [ "${#active_skills[@]}" -eq 0 ]; then

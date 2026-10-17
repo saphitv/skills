@@ -1,6 +1,10 @@
 ---
 name: how
 description: "Use for \"how does X work\", code walkthroughs before changing something, and placement / ownership / layering questions (\"where should this live\", \"which package owns this\", \"is this the right layer\"). Explains subsystem architecture, runtime flow, onboarding mental models. Use why for motivation."
+license: MIT
+metadata:
+  source: https://github.com/uzairansaruzi/p3-stack/tree/09909ebb5c0125e27fad3e57d96b81e832696d69/skills/how
+  upstream_commit: 09909ebb5c0125e27fad3e57d96b81e832696d69
 ---
 
 # How
@@ -22,7 +26,7 @@ When in doubt, take the simple path.
 
 Decompose the question into 2 to 4 exploration angles, each a distinct slice of the subsystem. Spawn all explorers in a single message:
 
-- Model: choose an available model using the delegation guidance.
+- Model: use the configured `how explorer` role when present; otherwise choose an available model using the delegation guidance.
 - Research only. No file edits or external mutations.
 
 Each explorer gets the prompt in `references/explorer-prompt.md` with its angle filled in. Then go to Step 3.
@@ -31,7 +35,7 @@ Each explorer gets the prompt in `references/explorer-prompt.md` with its angle 
 
 Spawn one subagent that explores and explains in one pass:
 
-- Model: choose an available model using the delegation guidance.
+- Model: use the configured `how explainer` role when present; otherwise choose an available model using the delegation guidance.
 - Research only. No file edits or external mutations.
 
 Build its prompt from `references/explainer-prompt.md` without the explorer-findings section. Go to Step 4.
@@ -40,7 +44,7 @@ Build its prompt from `references/explainer-prompt.md` without the explorer-find
 
 Once all explorers have returned, spawn one subagent to synthesize their findings into one explanation:
 
-- Model: choose an available model using the delegation guidance.
+- Model: use the configured `how explainer` role when present; otherwise choose an available model using the delegation guidance.
 - Research only. No file edits or external mutations.
 
 Build its prompt from `references/explainer-prompt.md` with every explorer's findings filled in.

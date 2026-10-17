@@ -1,6 +1,10 @@
 ---
 name: arena
 description: "Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. Use for /arena, 'arena this', 'throw it in the arena', or when one attempt at a non-trivial artifact would lock in the wrong shape."
+license: MIT
+metadata:
+  source: https://github.com/uzairansaruzi/p3-stack/tree/09909ebb5c0125e27fad3e57d96b81e832696d69/skills/arena
+  upstream_commit: 09909ebb5c0125e27fad3e57d96b81e832696d69
 ---
 
 # Arena
@@ -26,12 +30,12 @@ The N candidates will receive the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick two available models using the delegation guidance, preferably from different families. Respect the user's requested panel and budget.
+3. Use the configured `arena runners` role when present. Otherwise, pick two available models using the delegation guidance, preferably from different families. Respect the user's requested panel and budget.
 4. Assign a separate scratch output directory to each candidate. Never let competing candidates write the shared checkout, per the **separate-before-serializing-shared-state** principle skill.
 
 ## Phase B: Fan out
 
-Launch all N candidate subagents asynchronously using the current harness, each with the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale.
+Launch all N candidate subagents asynchronously using the current harness. Each brief must stand alone and contain the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale. A T3 child receives only its brief, never the parent's conversation.
 
 Each rationale names the alternatives the candidate considered and what it rejected.
 
@@ -39,7 +43,7 @@ If a candidate fails to produce output, proceed with N-1 and note the dropout in
 
 ## Phase C: Cross-judge
 
-After all candidates complete, launch one research-only judge using an available model, preferably from a different family than the parent's. Give it the rubric and the complete candidates or their accessible paths. It scores each criterion and recommends a base with rationale. Run it alongside the parent's reading, never while candidates are still writing.
+After all candidates complete, launch one research-only judge using the configured `arena cross-judge pool` role or an available model, preferably from a different family than the parent's. Give it the rubric and the complete candidates or their accessible paths. It scores each criterion and recommends a base with rationale. Run it alongside the parent's reading, never while candidates are still writing.
 
 ## Phase D: Pick a base
 

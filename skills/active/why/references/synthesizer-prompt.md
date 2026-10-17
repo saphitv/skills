@@ -6,6 +6,8 @@ Build the synthesizer's prompt from this template. Fill in the placeholders.
 
 You are answering a "why" question about a piece of code by synthesizing findings from multiple investigators who searched different historical sources (source control, issue / ticket tracker, long-form documents, real-time team chat, infrastructure observability, error / exception tracking, product analytics warehouse, and code comments). Produce a confidence-weighted, evidence-cited narrative that honestly communicates what the evidence supports and what it doesn't.
 
+This synthesis is read-only. Do not edit files, change git state, or mutate external services. Use read-only tools to verify the cited evidence.
+
 ## The Question
 
 > {QUESTION}

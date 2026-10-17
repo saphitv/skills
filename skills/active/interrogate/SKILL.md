@@ -2,6 +2,10 @@
 name: interrogate
 description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles."
 disable-model-invocation: true
+license: MIT
+metadata:
+  source: https://github.com/uzairansaruzi/p3-stack/tree/09909ebb5c0125e27fad3e57d96b81e832696d69/skills/interrogate
+  upstream_commit: 09909ebb5c0125e27fad3e57d96b81e832696d69
 ---
 
 # Interrogate
@@ -33,7 +37,7 @@ Write one clear paragraph. If you're unsure about the intent, ask the user befor
 
 ## Step 3, Spawn Reviewers
 
-Read [references/delegation.md](references/delegation.md), discover the current providers and models, and launch two independent research-only reviewers, preferably from different model families. Use the same filled prompt for both. Respect an explicit panel or budget from the user. Do not use fixed Cursor model slugs. A third reviewer is optional for sensitive changes.
+Read [references/delegation.md](references/delegation.md) and discover the current providers and models. Honor an explicit panel or budget from the user, then the configured `interrogate reviewers` role when present. Otherwise launch two independent research-only reviewers, preferably from different model families. Use the same filled prompt for every reviewer. Do not use fixed Cursor model slugs. A third reviewer is optional for sensitive changes.
 
 Review only. Do not apply fixes or open, update, or merge a PR unless separately requested. An unavailable model is a coverage limitation, not a reason to create a PR changing this skill.
 

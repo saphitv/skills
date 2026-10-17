@@ -1,0 +1,154 @@
+{
+  "upstreams": {
+    "p3-stack": {
+      "repository": "uzairansaruzi/p3-stack",
+      "branch": "main"
+    },
+    "pstack": {
+      "repository": "cursor/plugins",
+      "branch": "main"
+    }
+  },
+  "skills": {
+    "arena": {
+      "upstream": "p3-stack",
+      "paths": ["skills/arena", "LICENSE"],
+      "reviewed_commit": "09909ebb5c0125e27fad3e57d96b81e832696d69",
+      "adaptations": [
+        "Keep automatic discovery, two candidates by default, and cross-agent delegation guidance.",
+        "Use live model discovery without requiring setup-p3 or p3-models.md. Honor configured roles when present.",
+        "Candidate artifacts use separate scratch directories. Separate checkouts use delegate_task isolation, never top-level threads."
+      ]
+    },
+    "blast-radius": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/blast-radius", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local description and references to the selected how, why, and arena companions."]
+    },
+    "correct": {
+      "upstream": "p3-stack",
+      "paths": ["skills/correct", "LICENSE"],
+      "reviewed_commit": "09909ebb5c0125e27fad3e57d96b81e832696d69",
+      "adaptations": ["Keep explicit invocation in Codex and Claude Code. Routine corrections do not start this workflow or authorize unrelated external actions."]
+    },
+    "how": {
+      "upstream": "p3-stack",
+      "paths": ["skills/how", "LICENSE"],
+      "reviewed_commit": "09909ebb5c0125e27fad3e57d96b81e832696d69",
+      "adaptations": [
+        "Keep automatic discovery and cross-agent delegation guidance without requiring setup-p3 or p3-models.md. Honor configured roles when present.",
+        "Read-only git inspection is allowed; child tasks must not mutate files, git state, or external services."
+      ]
+    },
+    "interrogate": {
+      "upstream": "p3-stack",
+      "paths": ["skills/interrogate", "LICENSE"],
+      "reviewed_commit": "09909ebb5c0125e27fad3e57d96b81e832696d69",
+      "adaptations": [
+        "Keep explicit invocation in Codex and Claude Code and a verdict-only result. Reviews do not authorize fixes or PR changes.",
+        "Use two reviewers by default and live model discovery without requiring setup-p3 or p3-models.md. Honor configured panels and user budgets."
+      ]
+    },
+    "principle-boundary-discipline": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/principle-boundary-discipline", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local discovery description; preserve the upstream principle body."]
+    },
+    "principle-encode-lessons-in-structure": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/principle-encode-lessons-in-structure", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local discovery description. This guidance does not implicitly invoke the separate correct workflow."]
+    },
+    "principle-laziness-protocol": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/principle-laziness-protocol", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local discovery description; preserve the upstream principle body."]
+    },
+    "principle-prove-it-works": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/principle-prove-it-works", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local discovery description; preserve the upstream principle body."]
+    },
+    "principle-redesign-from-first-principles": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/principle-redesign-from-first-principles", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local discovery description; preserve the upstream principle body."]
+    },
+    "principle-separate-before-serializing-shared-state": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/principle-separate-before-serializing-shared-state", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local discovery description; preserve the upstream principle body."]
+    },
+    "principle-type-system-discipline": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/principle-type-system-discipline", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local discovery description and selected companion references."]
+    },
+    "pstack-babysit-pr": {
+      "upstream": "p3-stack",
+      "paths": ["skills/p3-mode/playbooks/babysit.md", "skills/p3-mode/references/bugbot-triage.md", "LICENSE"],
+      "reviewed_commit": "09909ebb5c0125e27fad3e57d96b81e832696d69",
+      "adaptations": [
+        "Keep the existing skill name and standalone check, threads-only, background, and drive modes without requiring p3-mode or shipping playbooks.",
+        "Use T3 event watches and cross-agent fallbacks. Babysitting does not authorize merges or stack topology changes.",
+        "Verify stale-base claims and review findings against current code. Repeated bot passes do not weaken evidence requirements.",
+        "Keep the condensed local triage rubric. Suggest candidate lessons without automatically opening an unrelated PR."
+      ]
+    },
+    "reflect": {
+      "upstream": "p3-stack",
+      "paths": ["skills/reflect", "LICENSE"],
+      "reviewed_commit": "09909ebb5c0125e27fad3e57d96b81e832696d69",
+      "adaptations": [
+        "Keep explicit invocation, three reviewer lenses, one synthesizer, and approval before applying proposed edits.",
+        "Read only the scoped session. Support Codex and Claude Code without requiring setup-p3, p3-models.md, or p3-mode.",
+        "Reviewers have read-only tools. Report backlog items; file external issues only when authorized."
+      ]
+    },
+    "tdd": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/tdd", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local trigger: explicit TDD or regression-test requests, or a bug with an obvious cheap local test target."]
+    },
+    "technical-writing": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/technical-writing", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the local discovery description and unslop companion."]
+    },
+    "typescript-best-practices": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/typescript-best-practices", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep automatic discovery when reading or editing TypeScript and the selected principle companions."]
+    },
+    "unslop": {
+      "upstream": "pstack",
+      "paths": ["pstack/skills/unslop", "pstack/LICENSE"],
+      "reviewed_commit": "23e4138daa01c42d4969f7a5465f82704e64f798",
+      "adaptations": ["Keep the always-apply description and stable rule numbers."]
+    },
+    "upload-file": {
+      "upstream": "local",
+      "adaptations": ["Maintain the skill and executable upload helper in this repository; there is no configured external update source."]
+    },
+    "why": {
+      "upstream": "p3-stack",
+      "paths": ["skills/why", "LICENSE"],
+      "reviewed_commit": "09909ebb5c0125e27fad3e57d96b81e832696d69",
+      "adaptations": [
+        "Keep automatic discovery and cross-agent delegation guidance without requiring setup-p3 or p3-models.md. Honor configured roles when present.",
+        "Inspect the live connector catalog. Every investigator and synthesizer may inspect evidence but must not mutate files, git state, or external services."
+      ]
+    }
+  }
+}
