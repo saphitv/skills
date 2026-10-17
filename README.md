@@ -139,15 +139,15 @@ Remove its name from any profiles before disabling or archiving it. Move it back
 The repeatable setup installs the default profile for Codex and Claude Code, links the P3 profile into `~/.agents/skills`, and writes `~/.agents/p3-models.md`. It preserves unrelated skills. Run it separately on Linux and macOS with model IDs validated on that host.
 
 1. Obtain the target host's `orchestrator_capabilities` result and save the structured JSON as `/tmp/p3-catalog.json`. In an agent session, invoke `$setup-p3` in Codex or `/setup-p3` in Claude Code to discover models and configure roles.
-2. Choose coding, judgment, and review entries from that catalog.
+2. Select `gpt-6.1-sol` for coding and judgment, and `claude-opus-5-5` for review, using the provider instance IDs from that host. These are the two models selected for this collection.
 3. Run the setup command from this checkout:
 
 ```sh
 ./scripts/setup-p3.sh \
   --catalog /tmp/p3-catalog.json \
-  --coding <provider/model> \
-  --judgment <provider/model> \
-  --reviewer <provider/model> \
+  --coding <codex-provider>/gpt-6.1-sol \
+  --judgment <codex-provider>/gpt-6.1-sol \
+  --reviewer <claude-provider>/claude-opus-5-5 \
   --budget medium
 ```
 

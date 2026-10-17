@@ -24,7 +24,7 @@ Call `orchestrator_capabilities` in the target host's session. Save its structur
 
 When configuring another host without a running agent session, its installed T3 provider configuration and current model manifest can establish available IDs. Validate reasoning capabilities with the installed provider binary. Record this catalog source honestly; do not describe it as a live tool response. If availability cannot be established, install the skills and report model configuration as pending.
 
-Choose a strong coding model for code, exploration, and swarm roles. Choose a capable judgment model for design and synthesis. Prefer an independent provider for the review panel when available. Default to two panel members. Explain the chosen mapping and any reduced model diversity.
+For this collection, use `gpt-6.1-sol` for coding, exploration, judgment, and synthesis, and `claude-opus-5-5` for independent review. Use only these two models unless the user changes this preference. Resolve their provider instance IDs from the target host catalog. Do not substitute Astra. Default to two panel members. Explain the chosen mapping and any reduced model diversity.
 
 ## Write and verify
 
