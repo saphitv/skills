@@ -6,7 +6,7 @@ To update skills, start with [Update skills](#update-skills). [`upstreams.json`]
 
 ## Profiles
 
-[`profiles/default`](profiles/default) selects `current`, which contains 20 active repo-managed skills. [`profiles/current.txt`](profiles/current.txt) lists their exact names. [`profiles/pstack.txt`](profiles/pstack.txt) selects the 19 pstack and P3 skills and companions, including standalone babysitting and session-review workflows. It is the selected subset, not the entire upstream pstack or P3 plugin.
+[`profiles/default`](profiles/default) selects `current`, which contains 45 active repo-managed skills. [`profiles/current.txt`](profiles/current.txt) lists their exact names. [`profiles/pstack.txt`](profiles/pstack.txt) selects the 44 pstack and P3 skills and companions, including standalone babysitting and session-review workflows. It includes the `p3-mode` entrypoint and all its bundled playbooks alongside selected companion skills. It does not install every upstream companion.
 
 With no skill names or profile option, installation, status, and pruning use the default profile:
 
@@ -28,32 +28,59 @@ A profile contains one active skill name per line. Blank lines and lines startin
 
 ## Current skill inventory
 
-The `current` profile contains these 20 skills. Automatic discovery means the agent can select a skill when its task matches. It does not mean every skill runs on every turn. `interrogate`, `reflect`, and `correct` require an explicit request in both Codex and Claude Code.
+The `current` profile contains 45 skills, including the 24 principles and the core P3 workflows. Automatic discovery means the agent can select a skill when its task matches. It does not mean every skill runs on every turn. P3 entrypoints, newly imported principles, and specialist workflows preserve upstream explicit invocation. Existing automatic companion policies remain unchanged.
 
 | Skill | Purpose |
 | --- | --- |
-| `arena` | Compare parallel candidate solutions and combine the strongest parts. |
-| `blast-radius` | Trace effects beyond a diff and verify concrete risks. |
-| `correct` | Prevent recurring repo mistakes through architecture, types, linting, and tests. Manual only. |
-| `how` | Explain runtime behavior and code ownership. |
-| `interrogate` | Run independent model reviews and return a verdict. Manual only. |
-| `principle-boundary-discipline` | Validate external inputs at system boundaries. |
-| `principle-encode-lessons-in-structure` | Turn recurring corrections into checks or code. |
-| `principle-laziness-protocol` | Prefer the smallest useful change and fewer abstractions. |
-| `principle-prove-it-works` | Verify the real artifact before declaring completion. |
-| `principle-redesign-from-first-principles` | Integrate new requirements into the design. |
-| `principle-separate-before-serializing-shared-state` | Separate concurrent writers where possible. |
-| `principle-type-system-discipline` | Use types to prevent invalid states. |
-| `pstack-babysit-pr` | Drive a PR or stack to merge-ready using pstack's review and CI workflow. |
-| `reflect` | Review a session and propose durable skill improvements. Manual only. |
-| `tdd` | Demonstrate a failing test before a fix when requested or locally practical. |
-| `technical-writing` | Write and review technical documentation. |
-| `typescript-best-practices` | Apply TypeScript modeling and coding guidance. |
-| `unslop` | Remove AI writing patterns. |
-| `upload-file` | Publish a file when URL sharing is requested. |
-| `why` | Investigate design decisions using historical evidence. |
+| `architect` | Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. |
+| `arena` | Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. |
+| `benchmark-checklist` | Vet a perf measurement (limiter, tuning, limits, errors, repeatability, relevance, and whether the work happened) before you report or act on it. |
+| `blast-radius` | Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. |
+| `correct` | Find the mistakes agents keep repeating in this repo and make each one impossible. |
+| `figure-it-out` | Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. |
+| `how` | Use for \"how does X work\", code walkthroughs before changing something, and placement / ownership / layering questions (\"where should this live\", \"which package owns this\", \"is this the right layer\"). |
+| `interrogate` | Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". |
+| `no-comments` | Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints. |
+| `p3-mode` | p3 agent style for concise, detailed responses, deliberate delegation, unslopped prose, simple code, and verified work. |
+| `principle-attack-the-premise` | Apply when two or more fixes that share one premise have failed the same gate. |
+| `principle-boundary-discipline` | Apply when wiring validation, error handling, or framework adapters. |
+| `principle-build-the-lever` | Apply to any non-trivial work, not just bulk work: edits, migrations, analyses, checks. |
+| `principle-encode-lessons-in-structure` | Apply when you catch yourself writing the same instruction a second time, or notice a recurring correction. |
+| `principle-exhaust-the-design-space` | Apply when facing a novel UI interaction or architectural decision with no precedent in the codebase. |
+| `principle-experience-first` | Apply when product, UX, or feature-scope tradeoffs come up. |
+| `principle-explain-the-number` | Apply before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. |
+| `principle-fix-root-causes` | Apply when debugging. |
+| `principle-foundational-thinking` | Apply before writing logic: choosing core types and data structures, sequencing scaffold-vs-feature work, asking what concurrent actors share. |
+| `principle-guard-the-context-window` | Apply when context is filling up: large outputs, long files, repeated reads, fan-out planning. |
+| `principle-laziness-protocol` | Apply when refactoring, evaluating diff size, or tempted to add abstractions, layers, or signal threading. |
+| `principle-make-operations-idempotent` | Apply when designing commands, lifecycle steps, or processing loops that run amid crashes, restarts, and retries. |
+| `principle-migrate-callers-then-delete-legacy-apis` | Apply when introducing a new internal API while old callers still exist. |
+| `principle-minimize-reader-load` | Apply when reviewing or shaping code that's hard to trace. |
+| `principle-model-the-domain` | Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files. |
+| `principle-never-block-on-the-human` | Apply when tempted to ask 'should I do X?' on reversible work. |
+| `principle-outcome-oriented-execution` | Apply during planned rewrites and migrations with explicit phase boundaries. |
+| `principle-prove-it-works` | Apply after completing a task, before declaring done. |
+| `principle-redesign-from-first-principles` | Apply when integrating a new requirement into an existing design. |
+| `principle-separate-before-serializing-shared-state` | Apply when concurrent actors might write to the same file, branch, key, or state object. |
+| `principle-sequence-verifiable-units` | Apply to multi-step work (sweeps, migrations, runs of similar edits) and to how you stack commits and PRs. |
+| `principle-subtract-before-you-add` | Apply when sequencing an addition, refactor, or rewrite. |
+| `principle-test-behavior-not-implementation` | Apply when you write, change, or keep a test. |
+| `principle-type-system-discipline` | Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. |
+| `pstack-babysit-pr` | Use when asked to babysit or monitor an existing PR or stack, get it merge-ready, check PR status, or address review bot comments. |
+| `reflect` | Delegate three parallel reviewers over the active thread, surface learnings, and route each to a concrete edit on an existing skill. |
+| `setup-p3` | Configure which models p3-stack uses per role and at what reasoning budget. |
+| `show-me-your-work` | Keep a reviewable decision trail for long-running or unattended work: a TSV log with one row per decision (what, why, evidence, result). |
+| `swarm` | Fan out N parallel workers, drain them, and return one report. |
+| `tdd` | Use only when the user explicitly asks for TDD, a failing test, or a regression test, OR when the bug has an obvious cheap local test target. |
+| `technical-writing` | Layered technical-writing standard: Diátaxis structure, Google developer style sentences, STE instruction rules, Global English syntax. |
+| `typescript-best-practices` | TypeScript best practices. |
+| `unslop` | Cut AI tells from any writing. |
+| `upload-file` | Use when a user asks to upload, publish, share, preview, or host a generated or existing file so another person, tool, or agent can open it by URL. |
+| `why` | Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. |
 
 All entries except `upload-file` belong to the `pstack` profile. `upload-file` is an existing repository utility retained in `current` for file sharing.
+
+Invoke `$p3-mode` in Codex or `/p3-mode` in Claude Code to use the P3 entrypoint. Its playbooks and worker briefs are bundled. The core workflow companions and all 24 principles are included. Partial installations can use the fallbacks in Local integration. Model roles in `p3-models.md` are honored when present; `setup-p3` is not required.
 
 After a substantial session with reusable lessons, ask "Use reflect to review this session." Reflection uses three reviewer lenses and a synthesizer, then presents proposed skill edits for approval. It does not automatically change skills or file backlog issues. Chat length alone is not a reason to run it.
 
@@ -105,6 +132,30 @@ mv skills/disabled/example skills/archived/
 ```
 
 Remove its name from any profiles before disabling or archiving it. Move it back to `skills/active/` and add it to a profile when you want it installed again. Disabled and archived skills are never installed.
+
+
+## Set up P3 on a machine
+
+The repeatable setup installs the default profile for Codex and Claude Code, links the P3 profile into `~/.agents/skills`, and writes `~/.agents/p3-models.md`. It preserves unrelated skills. Run it separately on Linux and macOS with model IDs validated on that host.
+
+1. Obtain the target host's `orchestrator_capabilities` result and save the structured JSON as `/tmp/p3-catalog.json`. In an agent session, invoke `$setup-p3` in Codex or `/setup-p3` in Claude Code to discover models and configure roles.
+2. Choose coding, judgment, and review entries from that catalog.
+3. Run the setup command from this checkout:
+
+```sh
+./scripts/setup-p3.sh \
+  --catalog /tmp/p3-catalog.json \
+  --coding <provider/model> \
+  --judgment <provider/model> \
+  --reviewer <provider/model> \
+  --budget medium
+```
+
+`medium` means `high` reasoning. The helper uses the highest supported effort within that budget. Models without a reasoning option retain their provider behavior. Panels have two members by default. Provider and model selections live in the generated machine configuration, rather than in this repository.
+
+`--check` prints the validated model configuration without changing files. An existing differing model configuration needs `--replace` after review. Project `p3-models.md` overrides the global file. Re-run setup to update a host. Existing `.agents/skills` collisions stop setup for review before installation; unrelated entries are retained.
+
+The standalone configuration helper is `skills/active/setup-p3/scripts/configure.py`. It can update model roles without reinstalling skills. Its defaults, budget mapping, and role groups are the setup policy checked into this repository.
 
 ## Inspect installations
 
@@ -177,7 +228,7 @@ When asked to "update the skills", use [`upstreams.json`](upstreams.json) as the
 
 | Update source | Skills |
 | --- | --- |
-| [P3 Stack](https://github.com/uzairansaruzi/p3-stack) | `arena`, `how`, `why`, `interrogate`, `reflect`, `correct`, and `pstack-babysit-pr` |
+| [P3 Stack](https://github.com/uzairansaruzi/p3-stack) | `arena`, `how`, `why`, `interrogate`, `reflect`, `correct`, `p3-mode`, and `pstack-babysit-pr` |
 | [Original pstack](https://github.com/cursor/plugins/tree/main/pstack) | `blast-radius`, all seven `principle-*` skills, `tdd`, `technical-writing`, `typescript-best-practices`, and `unslop` |
 | This repository | `upload-file` |
 
@@ -231,7 +282,7 @@ Skills can influence agent behavior and may include executable files or tool per
 
 The initial pstack batch came from `cursor/plugins` commit `23e4138daa01c42d4969f7a5465f82704e64f798`. It included `technical-writing`, `how`, `interrogate`, `blast-radius`, `tdd`, and `typescript-best-practices`, plus `why`, `arena`, and the referenced principle companions. Future updates follow the assignments in `upstreams.json`; this paragraph records the historical import.
 
-`reflect` and `correct` come from [P3 Stack](https://github.com/uzairansaruzi/p3-stack/tree/09909ebb5c0125e27fad3e57d96b81e832696d69), commit `09909ebb5c0125e27fad3e57d96b81e832696d69`. Their manual invocation policy is preserved for both agents. The selected-set adaptation lets reflection run without `setup-p3`, `p3-models.md`, or the full `p3-mode` authoring playbook. It uses live model discovery and the available skill-authoring workflow, scopes transcript reads to the requested session, and keeps external backlog filing within the user's authorization.
+`reflect` and `correct` come from [P3 Stack](https://github.com/uzairansaruzi/p3-stack/tree/09909ebb5c0125e27fad3e57d96b81e832696d69), commit `09909ebb5c0125e27fad3e57d96b81e832696d69`. Their manual invocation policy is preserved for both agents. The selected-set adaptation lets reflection run without `setup-p3`, `p3-models.md`, or the `p3-mode` authoring playbook. It uses live model discovery and the available skill-authoring workflow, scopes transcript reads to the requested session, and keeps external backlog filing within the user's authorization.
 
 `pstack-babysit-pr` was initially adapted from the [pstack Babysit playbook](https://github.com/cursor/plugins/blob/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack/skills/poteto-mode/playbooks/babysit.md) and its review-triage rubric at commit `99743e9c151c8537cbbf1f98bb38f34ef3368453`. It now follows the [P3 Babysit playbook](https://github.com/uzairansaruzi/p3-stack/blob/09909ebb5c0125e27fad3e57d96b81e832696d69/skills/p3-mode/playbooks/babysit.md) and its rubric, reviewed at commit `09909ebb5c0125e27fad3e57d96b81e832696d69`. Its existing name is preserved. It supports one-pass status, review-only work, background monitoring, and driving a PR or stack to merge-ready. Stack work proceeds from the lowest unmerged PR upward. Babysitting leaves rebases to the branch owner and does not authorize merging.
 
@@ -242,3 +293,7 @@ In T3, the adapted skill uses `watch_pull_request`, yields while waiting, and st
 The archived Matt Pocock TDD skill lives in `skills/archived/matt-pocock-tdd/` to distinguish it from the active pstack `tdd` skill. Its original files are unchanged.
 
 For a complete feature workflow, ask the agent to implement and verify the change, run interrogate and fix confirmed findings, then open the PR and babysit CI and reviews. These steps run together only when requested; they do not imply permission to merge.
+
+`p3-mode` and its 23 playbooks come from P3 Stack commit `09909ebb5c0125e27fad3e57d96b81e832696d69`. The import preserves explicit invocation in Codex and Claude Code, bundles the worker and comment-review briefs, and includes the upstream license. Local adaptations resolve resources from the installed skill, provide fallbacks for unselected companions, keep model setup optional, preserve task authorization, and use child-task worktree isolation for delegation. The entrypoint does not require the target project to vendor the upstream plugin.
+
+The core P3 expansion adds `architect`, `swarm`, `figure-it-out`, `show-me-your-work`, `benchmark-checklist`, `setup-p3`, `no-comments`, and the 17 previously missing principle skills from P3 Stack commit `09909ebb5c0125e27fad3e57d96b81e832696d69`. The portable setup supports Linux and macOS, applies project then global model roles, and keeps the medium/high budget reproducible without committing account-specific configuration.

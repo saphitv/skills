@@ -28,7 +28,7 @@ Reviewers get only their brief, never the parent's context. Pass the thread id a
 
 Read [references/delegation.md](references/delegation.md). Launch three independent reviewers asynchronously. Reviewers may make read-only context lookups for tickets, chat threads, and traces cited by the session, but cannot edit files or mutate external services.
 
-Resolve models from the live catalog. Honor existing role lines in `p3-models.md` when present; without that file, use available models and prefer different families for independent lenses. Never hardcode a slug.
+Resolve models from the live catalog. Honor role lines and reasoning effort from project `p3-models.md`, then `~/.agents/p3-models.md`, when present; without that file, use available models and prefer different families for independent lenses. Never hardcode a slug.
 
 | Lens | Role line | Prompt template |
 |---|---|---|

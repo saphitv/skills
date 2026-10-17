@@ -116,7 +116,7 @@ mv "$test_root/repo/skills/active/qstack-babysit-pr" "$test_root/repo/skills/arc
 
 # The default profile installs the maintained selection in both accounts.
 install_output="$(run_installer 2>&1)"
-assert_contains "$install_output" "Installed 20 active skill(s)"
+assert_contains "$install_output" "Installed 45 active skill(s)"
 for account in codex claude; do
   while IFS= read -r skill; do
     [ -f "$test_root/$account/skills/$skill/SKILL.md" ] || fail "default profile omitted $account/$skill"
@@ -132,6 +132,9 @@ assert_contains "$status_output" "STALE      Claude/qstack-babysit-pr (archived)
 prune_output="$(run_installer prune --yes 2>&1)"
 assert_contains "$prune_output" "Removed Codex/qstack-babysit-pr"
 for account in codex claude; do
+  for resource in playbooks/feature.md playbooks/shipping.md agents/p3-agent.md agents/comment-sicko.md references/delegation.md LICENSE; do
+    [ -f "$test_root/$account/skills/p3-mode/$resource" ] || fail "P3 entrypoint lost $resource"
+  done
   [ ! -e "$test_root/$account/skills/qstack-babysit-pr" ] || fail "archive prune retained qstack"
   [ -f "$test_root/$account/skills/pstack-babysit-pr/references/review-triage.md" ] ||
     fail "replacement babysitter lost its triage reference"
@@ -139,7 +142,7 @@ done
 
 # Profile installation reports existing extras, but only prune removes them.
 install_output="$(run_installer install --profile pstack 2>&1)"
-assert_contains "$install_output" "Installed 19 active skill(s)"
+assert_contains "$install_output" "Installed 44 active skill(s)"
 [ -f "$test_root/codex/skills/upload-file/SKILL.md" ] || fail "profile install removed an extra"
 status_output="$(run_installer status --profile pstack 2>&1)"
 assert_contains "$status_output" "Active skills (profile: pstack)"
@@ -150,7 +153,7 @@ prune_output="$(run_installer prune --profile pstack --yes 2>&1)"
 assert_contains "$prune_output" "Removed Codex/upload-file"
 for account in codex claude; do
   [ ! -e "$test_root/$account/skills/upload-file" ] || fail "profile prune retained $account/upload-file"
-  for manual_skill in interrogate reflect correct; do
+  for manual_skill in interrogate reflect correct p3-mode; do
     [ -f "$test_root/$account/skills/$manual_skill/SKILL.md" ] || fail "profile prune removed $manual_skill"
     grep -q 'allow_implicit_invocation: false' "$test_root/$account/skills/$manual_skill/agents/openai.yaml" ||
       fail "profile installation changed manual invocation for $manual_skill"
