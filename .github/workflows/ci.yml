@@ -9,9 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - run: bash -n scripts/install.sh tests/install_test.sh
-      - run: shellcheck scripts/install.sh tests/install_test.sh
+      - run: bash -n scripts/install.sh scripts/setup-p3.sh skills/active/show-me-your-work/scripts/log.sh tests/install_test.sh
+      - run: shellcheck scripts/install.sh scripts/setup-p3.sh skills/active/show-me-your-work/scripts/log.sh tests/install_test.sh
       - run: ./tests/install_test.sh
+      - run: python3 -B scripts/check-upstreams.py --validate
+      - run: python3 -B -m unittest discover -s tests -p '*_test.py'
       - run: |
           while IFS= read -r -d '' skill_md; do
             dir=${skill_md%/*}
