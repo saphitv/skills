@@ -24,7 +24,7 @@ Call `orchestrator_capabilities` in the target host's session. Save its structur
 
 When configuring another host without a running agent session, its installed T3 provider configuration and current model manifest can establish available IDs. Validate reasoning capabilities with the installed provider binary. Record this catalog source honestly; do not describe it as a live tool response. If availability cannot be established, install the skills and report model configuration as pending.
 
-For this collection, use `gpt-6.1-sol` for coding, exploration, judgment, and synthesis, and `claude-opus-5-5` for independent review. Use only these two models unless the user changes this preference. Resolve their provider instance IDs from the target host catalog. Do not substitute Astra. Default to two panel members. Explain the chosen mapping and any reduced model diversity.
+For this collection, use `gpt-6.1-sol` for coding, exploration, judgment, and synthesis, and `claude-opus-5-5` for UI prototyping, visual design, and independent review. Use only these two models unless the user changes this preference. Resolve their provider instance IDs from the target host catalog. Do not substitute Astra. Default to two panel members. Explain the chosen mapping and any reduced model diversity.
 
 ## Write and verify
 
@@ -35,11 +35,12 @@ python3 <setup-p3-dir>/scripts/configure.py \
   --catalog /tmp/p3-catalog.json \
   --coding <provider/model> \
   --judgment <provider/model> \
+  --ui-design <provider/model> \
   --reviewer <provider/model> \
   --budget medium
 ```
 
-The helper validates selections and efforts, writes all roles atomically, and leaves an identical configuration unchanged. `--check` validates and prints without writing. A differing existing file requires review and `--replace`; use it when the user's request already authorizes the configuration update. `--output <project>/p3-models.md` selects project scope.
+The helper validates selections and efforts, writes all roles atomically, and leaves an identical configuration unchanged. `--ui-design` writes the `UI prototyping, visual design` role. If omitted, it uses the first reviewer, or the judgment model when no reviewer is selected. `--check` validates and prints without writing. A differing existing file requires review and `--replace`; use it when the user's request already authorizes the configuration update. `--output <project>/p3-models.md` selects project scope.
 
 Read the actual file after writing. Before every delegation, resolve its entries against that session's live catalog and apply each entry's effort through the advertised `reasoningEffort` or `effort` option. An unavailable entry needs a stated fallback or a configuration update. Never silently ignore it.
 

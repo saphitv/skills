@@ -137,6 +137,7 @@
         "Use delegate_task worktree isolation for child checkouts and reserve top-level conversations for explicit user requests. Preserve existing checkout edits.",
         "Keep external actions, PR delivery, merges, and persistent schedules within the user's authorization. Use available host tools outside T3.",
         "Keep check mode read-only apart from required host PR registration. Verify stale-base and bot claims against current code regardless of review-pass count.",
+        "Delegate visual prototype authoring to the configured UI prototyping or visual design role. The coordinator verifies and presents the artifact.",
         "Resolve project then global model configuration and apply advertised reasoning effort when delegating."
       ]
     },
@@ -442,7 +443,8 @@
       "reviewed_commit": "09909ebb5c0125e27fad3e57d96b81e832696d69",
       "adaptations": [
         "Preserve explicit invocation in Codex and Claude Code and bundle the upstream license.",
-        "Use the bundled portable configuration helper, default medium/high budget, and host-validated model selections. Keep account-specific IDs outside the repository."
+        "Use the bundled portable configuration helper, default medium/high budget, and host-validated model selections. Keep account-specific IDs outside the repository.",
+        "Configure Opus for UI prototyping and visual design through --ui-design and preserve the separate coding, synthesis, and review roles. Accept current live catalog values and legacy option descriptors."
       ]
     },
     "show-me-your-work": {

@@ -139,7 +139,7 @@ Remove its name from any profiles before disabling or archiving it. Move it back
 The repeatable setup installs the default profile for Codex and Claude Code, links the P3 profile into `~/.agents/skills`, and writes `~/.agents/p3-models.md`. It preserves unrelated skills. Run it separately on Linux and macOS with model IDs validated on that host.
 
 1. Obtain the target host's `orchestrator_capabilities` result and save the structured JSON as `/tmp/p3-catalog.json`. In an agent session, invoke `$setup-p3` in Codex or `/setup-p3` in Claude Code to discover models and configure roles.
-2. Select `gpt-6.1-sol` for coding and judgment, and `claude-opus-5-5` for review, using the provider instance IDs from that host. These are the two models selected for this collection.
+2. Select `gpt-6.1-sol` for coding and judgment, and `claude-opus-5-5` for UI prototyping and review, using the provider instance IDs from that host. These are the two models selected for this collection.
 3. Run the setup command from this checkout:
 
 ```sh
@@ -147,6 +147,7 @@ The repeatable setup installs the default profile for Codex and Claude Code, lin
   --catalog /tmp/p3-catalog.json \
   --coding <codex-provider>/gpt-6.1-sol \
   --judgment <codex-provider>/gpt-6.1-sol \
+  --ui-design <claude-provider>/claude-opus-5-5 \
   --reviewer <claude-provider>/claude-opus-5-5 \
   --budget medium
 ```
@@ -156,6 +157,8 @@ The repeatable setup installs the default profile for Codex and Claude Code, lin
 `--check` prints the validated model configuration without changing files. An existing differing model configuration needs `--replace` after review. Project `p3-models.md` overrides the global file. Re-run setup to update a host. Existing `.agents/skills` collisions stop setup for review before installation; unrelated entries are retained.
 
 The standalone configuration helper is `skills/active/setup-p3/scripts/configure.py`. It can update model roles without reinstalling skills. Its defaults, budget mapping, and role groups are the setup policy checked into this repository.
+
+Visual prototypes use the generated `UI prototyping, visual design` role. The selected designer authors the prototype, and the coordinator verifies it. Pull the repository, install the updated skills, and rerun setup with `--ui-design` to apply this routing on another machine. Fetching alone does not update installed skills or machine configuration.
 
 ## Inspect installations
 

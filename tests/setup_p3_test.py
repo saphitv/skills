@@ -28,10 +28,34 @@ class SetupTests(unittest.TestCase):
         self.assertIn("# budget: medium (high)\n", text)
         self.assertIn("bug-fix: work/code (high)\n", text)
         self.assertIn("hardest tasks: work/judge (high)\n", text)
+        self.assertIn("UI prototyping, visual design: work/judge (high)\n", text)
         self.assertIn("architect runners: work/code (high), work/judge (high)\n", text)
 
     def test_budget_never_selects_effort_above_ceiling(self):
         self.assertEqual(setup.model_entry(catalog(("medium", "max")), "work/code", "medium"), "work/code (medium)")
+
+    def test_cli_writes_selected_ui_designer_from_live_catalog(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data = catalog()
+            data["providers"].append({
+                "providerInstanceId": "claude", "canRunChildTask": True,
+                "models": [{"id": "opus", "options": [{
+                    "id": "effort", "values": ["low", "medium", "high", "max"],
+                }]}],
+            })
+            source = root / "catalog.json"
+            source.write_text(json.dumps(data))
+            output = root / "p3-models.md"
+            result = subprocess.run([
+                "python3", str(SCRIPT), "--catalog", str(source),
+                "--coding", "work/code", "--judgment", "work/judge",
+                "--ui-design", "claude/opus", "--output", str(output),
+            ], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            text = output.read_text()
+            self.assertIn("UI prototyping, visual design: claude/opus (high)\n", text)
+            self.assertIn("feature, refactoring: work/code (high)\n", text)
 
     def test_unknown_or_disabled_model_is_rejected(self):
         for selection in ("other/code", "work/missing", "malformed"):
