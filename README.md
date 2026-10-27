@@ -8,7 +8,7 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 | --- | --- |
 | `full-send` | Complete, validate, review, file, monitor, and merge a PR. |
 | `full-stop` | Prepare a PR for the user to merge. |
-| `council` | Request reviews from three models across different providers. |
+| `council` | Request reviews from Claude Opus 5.5, GPT-6.1 Sol, and GPT-6.1 Terra across two providers. |
 | `sol-loop` | Repeat reviews with GPT Sol until agreement. |
 | `file-pr` | File a concise PR focused on the problem. |
 | `takeover` | Finish an existing PR, branch, or agent thread while preserving contributor credit. |
@@ -18,6 +18,8 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 | `upload-file` | Upload a requested file with the existing `upload` command. |
 
 [`profiles/current.txt`](profiles/current.txt) selects all ten skills. [`profiles/tstack.txt`](profiles/tstack.txt) selects the nine upstream skills. [`profiles/default`](profiles/default) selects `current`.
+
+Council defaults to three distinct models across Anthropic and OpenAI, at high effort. It intentionally uses two OpenAI reviewers and needs no third provider. Explicitly named council members override these defaults. Unavailable members are reported rather than silently replaced. Provider account IDs are resolved from the live catalog on each machine.
 
 ## Install
 
@@ -68,6 +70,6 @@ The installer reads only `skills/active/` and never installs from `poteto/`. The
 
 ## Credits
 
-The nine tstack skills are by Theo Browne, under the [MIT license](skills/active/full-send/LICENSE). They were imported from commit `92e38e2cf677a84a142e8df296861c588542135c`, with the license bundled in every skill. Their instructions and supporting files are unchanged.
+The nine tstack skills are by Theo Browne, under the [MIT license](skills/active/full-send/LICENSE). They were imported from commit `92e38e2cf677a84a142e8df296861c588542135c`, with the license bundled in every skill. Council has a local adaptation for the three-model panel across two providers, recorded in `upstreams.json`. The other imported instructions and supporting files are unchanged.
 
 `upload-file` is the existing locally maintained utility. Historical author credits, licenses, and adaptation notes remain in `poteto/`.
