@@ -19,7 +19,7 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 
 [`profiles/current.txt`](profiles/current.txt) selects all ten skills. [`profiles/tstack.txt`](profiles/tstack.txt) selects the nine upstream skills. [`profiles/default`](profiles/default) selects `current`.
 
-Council defaults to three distinct models across Anthropic and OpenAI, at high effort. It intentionally uses two OpenAI reviewers and needs no third provider. Explicitly named council members override these defaults. Unavailable members are reported rather than silently replaced. Provider account IDs are resolved from the live catalog on each machine.
+Council defaults to Claude Opus 5.5 at `high`, GPT-6.1 Sol at `high`, and GPT-6.1 Terra at `xhigh`. It intentionally uses two OpenAI reviewers and needs no third provider. Explicitly named council members or effort settings override these defaults. Unavailable members are reported rather than silently replaced. Provider account IDs are resolved from the live catalog on each machine.
 
 ## Install
 

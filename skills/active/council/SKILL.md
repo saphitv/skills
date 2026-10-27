@@ -6,20 +6,21 @@ description: Trigger this if the user says 'council'.
 # Council
 
 Bring in three delegates to help with the user's request, usually for review
-or feedback, at high reasoning effort. Unless the user's instructions name
-different council members, use these three distinct models:
+or feedback. Unless the user's instructions specify different council members
+or effort, use these three distinct models:
 
-- Anthropic Claude Opus 5.5 (`claude-opus-5-5`).
-- OpenAI GPT-6.1 Sol (`gpt-6.1-sol`).
-- OpenAI GPT-6.1 Terra (`gpt-6.1-terra`).
+- Anthropic Claude Opus 5.5 (`claude-opus-5-5`), effort `high`.
+- OpenAI GPT-6.1 Sol (`gpt-6.1-sol`), reasoning effort `high`.
+- OpenAI GPT-6.1 Terra (`gpt-6.1-terra`), reasoning effort `xhigh`.
 
 This panel intentionally uses two providers, with two OpenAI models. It does
 not require a third provider.
 
 In T3 Code, use `orchestrator_capabilities` to resolve each model to an enabled
 provider instance that can run child tasks. Do not hardcode account-specific
-provider instance IDs. Pass high effort through `target.options`, using the
-option advertised by that provider, such as `effort` or `reasoningEffort`.
+provider instance IDs. Pass each member's specified effort through
+`target.options`, using the option advertised by that provider, such as
+`effort` or `reasoningEffort`.
 Then use `delegate_task` to start one delegate per model in parallel.
 Elsewhere, use the harness's subagent tools. If a selected member or its
 required effort is unavailable, report it instead of substituting a model or
