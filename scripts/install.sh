@@ -288,6 +288,10 @@ inactive_collection() {
     printf 'disabled'
   elif [ -f "$archived_dir/$skill/SKILL.md" ]; then
     printf 'archived'
+  elif [ -f "$repo_root/poteto/skills/active/$skill/SKILL.md" ] ||
+       [ -f "$repo_root/poteto/skills/disabled/$skill/SKILL.md" ] ||
+       [ -f "$repo_root/poteto/skills/archived/$skill/SKILL.md" ]; then
+    printf 'archived in poteto'
   else
     printf 'not in this repository'
   fi

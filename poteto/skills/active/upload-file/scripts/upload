@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+"""Upload one file and print its clickable browser-view capability URL."""
+
+from __future__ import annotations
+
+import json
+import mimetypes
+import os
+from pathlib import Path
+import shlex
+import sys
+from typing import NoReturn
+from urllib.error import HTTPError, URLError
+from urllib.parse import quote
+from urllib.request import Request, urlopen
+
+
+def fail(message: str) -> NoReturn:
+    print(f"upload: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+def config_path() -> Path:
+    override = os.environ.get("UPLOAD_CONFIG_FILE")
+    if override:
+        return Path(override).expanduser()
+
+    config_home = os.environ.get("XDG_CONFIG_HOME")
+    root = Path(config_home).expanduser() if config_home else Path.home() / ".config"
+    return root / "agent-file-upload" / "env"
+
+
+def read_config(path: Path) -> dict[str, str]:
+    try:
+        contents = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {}
+    except OSError as error:
+        fail(f"could not read config file {path}: {error}")
+
+    values: dict[str, str] = {}
+    allowed = {"UPLOAD_SERVICE_URL", "UPLOAD_SERVICE_TOKEN"}
+    for line_number, line in enumerate(contents.splitlines(), start=1):
+        lexer = shlex.shlex(line, posix=True)
+        lexer.commenters = "#"
+        lexer.whitespace_split = True
+        try:
+            parts = list(lexer)
+        except ValueError:
+            fail(f"invalid config file {path} at line {line_number}")
+        if not parts:
+            continue
+        if parts[0] == "export":
+            parts = parts[1:]
+        if len(parts) != 1 or "=" not in parts[0]:
+            fail(f"invalid config file {path} at line {line_number}")
+
+        key, value = parts[0].split("=", 1)
+        if key in allowed:
+            values[key] = value
+
+    return values
+
+
+def main() -> None:
+    if len(sys.argv) != 2:
+        fail("usage: upload <file>")
+
+    path = Path(sys.argv[1]).expanduser()
+    if not path.is_file():
+        fail(f"not a file: {path}")
+
+    saved = read_config(config_path())
+    endpoint = (os.environ.get("UPLOAD_SERVICE_URL") or saved.get("UPLOAD_SERVICE_URL", "")).rstrip("/")
+    token = os.environ.get("UPLOAD_SERVICE_TOKEN") or saved.get("UPLOAD_SERVICE_TOKEN", "")
+    if not endpoint:
+        fail(f"UPLOAD_SERVICE_URL is not configured in the environment or {config_path()}")
+    if not token:
+        fail(f"UPLOAD_SERVICE_TOKEN is not configured in the environment or {config_path()}")
+
+    content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+    upload_url = f"{endpoint}/upload?filename={quote(path.name, safe='')}"
+
+    try:
+        request = Request(
+            upload_url,
+            data=path.read_bytes(),
+            method="POST",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": content_type,
+                "Accept": "application/json",
+                "User-Agent": "agent-file-upload/0.1",
+            },
+        )
+        with urlopen(request, timeout=300) as server_response:
+            response_body = server_response.read().decode("utf-8")
+    except HTTPError as error:
+        detail = error.read().decode("utf-8", errors="replace").strip()
+        try:
+            detail = json.loads(detail).get("error", detail)
+        except json.JSONDecodeError:
+            pass
+        fail(f"server returned HTTP {error.code}: {detail or error.reason}")
+    except URLError as error:
+        fail(f"could not reach upload service: {error.reason}")
+    except OSError as error:
+        fail(f"could not read file: {error}")
+
+    try:
+        response = json.loads(response_body)
+        public_url = response["url"]
+    except (json.JSONDecodeError, KeyError, TypeError):
+        fail("server returned an invalid response")
+
+    if not isinstance(public_url, str) or not public_url.startswith(("http://", "https://")):
+        fail("server returned an invalid URL")
+    print(public_url)
+
+
+if __name__ == "__main__":
+    main()
