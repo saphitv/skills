@@ -12,9 +12,10 @@
         "skills/babysit-pr",
         "LICENSE"
       ],
-      "reviewed_commit": "92e38e2cf677a84a142e8df296861c588542135c",
+      "reviewed_commit": "1085050f3baed1ac724caa4a8166145fb2ac88af",
       "adaptations": [
-        "Bundle the upstream MIT license. Skill instructions and supporting files are unchanged."
+        "Bundle the upstream MIT license. Supporting files are unchanged.",
+        "Resolve GitHub review threads once every actionable finding is fixed, checked, and pushed; revisit older unresolved threads fixed in the current PR head, leave pending or uncertain findings open, and report resolution failures."
       ]
     },
     "council": {
@@ -23,7 +24,7 @@
         "skills/council",
         "LICENSE"
       ],
-      "reviewed_commit": "92e38e2cf677a84a142e8df296861c588542135c",
+      "reviewed_commit": "1085050f3baed1ac724caa4a8166145fb2ac88af",
       "adaptations": [
         "Bundle the upstream MIT license.",
         "Default to Claude Opus 5.5 at high effort, GPT-6.1 Sol at high reasoning effort, and GPT-6.1 Terra at xhigh reasoning effort across Anthropic and OpenAI. Permit two OpenAI reviewers without requiring a third provider; preserve explicit user overrides.",
@@ -36,7 +37,7 @@
         "skills/file-pr",
         "LICENSE"
       ],
-      "reviewed_commit": "92e38e2cf677a84a142e8df296861c588542135c",
+      "reviewed_commit": "1085050f3baed1ac724caa4a8166145fb2ac88af",
       "adaptations": [
         "Bundle the upstream MIT license. Skill instructions and supporting files are unchanged."
       ]
@@ -47,7 +48,7 @@
         "skills/full-send",
         "LICENSE"
       ],
-      "reviewed_commit": "92e38e2cf677a84a142e8df296861c588542135c",
+      "reviewed_commit": "1085050f3baed1ac724caa4a8166145fb2ac88af",
       "adaptations": [
         "Bundle the upstream MIT license. Skill instructions and supporting files are unchanged."
       ]
@@ -58,7 +59,7 @@
         "skills/full-stop",
         "LICENSE"
       ],
-      "reviewed_commit": "92e38e2cf677a84a142e8df296861c588542135c",
+      "reviewed_commit": "1085050f3baed1ac724caa4a8166145fb2ac88af",
       "adaptations": [
         "Bundle the upstream MIT license. Skill instructions and supporting files are unchanged."
       ]
@@ -69,7 +70,7 @@
         "skills/leaving-pr-comments",
         "LICENSE"
       ],
-      "reviewed_commit": "92e38e2cf677a84a142e8df296861c588542135c",
+      "reviewed_commit": "1085050f3baed1ac724caa4a8166145fb2ac88af",
       "adaptations": [
         "Bundle the upstream MIT license. Skill instructions and supporting files are unchanged."
       ]
@@ -80,7 +81,7 @@
         "skills/modernize",
         "LICENSE"
       ],
-      "reviewed_commit": "92e38e2cf677a84a142e8df296861c588542135c",
+      "reviewed_commit": "1085050f3baed1ac724caa4a8166145fb2ac88af",
       "adaptations": [
         "Bundle the upstream MIT license. Skill instructions and supporting files are unchanged."
       ]
@@ -91,7 +92,7 @@
         "skills/sol-loop",
         "LICENSE"
       ],
-      "reviewed_commit": "92e38e2cf677a84a142e8df296861c588542135c",
+      "reviewed_commit": "1085050f3baed1ac724caa4a8166145fb2ac88af",
       "adaptations": [
         "Bundle the upstream MIT license. Skill instructions and supporting files are unchanged."
       ]
@@ -102,7 +103,7 @@
         "skills/takeover",
         "LICENSE"
       ],
-      "reviewed_commit": "92e38e2cf677a84a142e8df296861c588542135c",
+      "reviewed_commit": "1085050f3baed1ac724caa4a8166145fb2ac88af",
       "adaptations": [
         "Bundle the upstream MIT license. Skill instructions and supporting files are unchanged."
       ]
