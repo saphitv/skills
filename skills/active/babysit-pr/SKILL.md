@@ -80,6 +80,14 @@ finding against the source before changing code. Fix real findings and CI
 failures, distinguish repository failures from infrastructure flakes, and reply
 with a written reason when dismissing false positives.
 
+After fixing a review finding, run the relevant checks and push the fix, then
+mark its GitHub review thread as resolved. Also revisit older unresolved
+threads whose findings are fixed in the current PR head. Resolve a thread only
+when every actionable finding in it is addressed; leave pending or uncertain
+findings open so unresolved threads show what still needs work. Confirm that
+resolution succeeded, and report any permissions or API failure that prevents
+it.
+
 If the repo has `.macroscope/check-run-agents/*.md`, read those rules before you
 reply to a Macroscope finding. Its findings cite them.
 
