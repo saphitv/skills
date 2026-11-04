@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Audit (Testing)"
+  short_description: "Experimental Cloudflare security audit workflow"
+  default_prompt: "Use $security-audit-testing for a quick security audit of this repository."

@@ -3,6 +3,10 @@
     "tstack": {
       "repository": "t3dotgg/tstack",
       "branch": "main"
+    },
+    "cloudflare-security-audit": {
+      "repository": "cloudflare/security-audit-skill",
+      "branch": "main"
     }
   },
   "skills": {
@@ -112,6 +116,19 @@
       "upstream": "local",
       "adaptations": [
         "Maintain the skill and executable upload helper in this repository; there is no configured external update source."
+      ]
+    },
+    "security-audit-testing": {
+      "upstream": "cloudflare-security-audit",
+      "paths": [
+        "skills/security-audit",
+        "LICENSE"
+      ],
+      "reviewed_commit": "c1c8a8c1471069fb0e188eeaff69b8e8db6564a8",
+      "adaptations": [
+        "Trial installation named security-audit-testing; mark the frontmatter and UI as experimental and add a source/provenance note. The upstream audit workflow, schema, validators, tests, and domain references are unchanged.",
+        "Bundle the upstream MIT license. All files under skills/security-audit and LICENSE are retained; no upstream files are omitted.",
+        "Keep the trial outside profiles/current.txt and profiles/default. profiles/security-testing.txt adds it to the current collection; pruning with the current profile removes the trial installations."
       ]
     }
   }

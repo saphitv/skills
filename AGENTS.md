@@ -2,7 +2,7 @@
 
 When asked to update skills, read the [update procedure](README.md#update-skills) and [upstream map](upstreams.json) first.
 
-- Every active skill has one update source in `upstreams.json`: tstack or local maintenance.
+- Every active skill has one update source in `upstreams.json`: a configured upstream or local maintenance.
 - Run `python3 scripts/check-upstreams.py` to find changes since each skill's reviewed commit. This command is read-only.
 - Compare the recorded upstream revision with the new upstream revision, then integrate relevant changes into the local skill and its supporting files. Local differences alone do not mean a skill is outdated.
 - Preserve the adaptations recorded in the map, original author credits, and licenses. Historical import sources in the README or skill metadata do not override the update map.

@@ -43,6 +43,34 @@ Unmanaged skills require separate review and removal. Keep backups outside every
 
 The machine-specific `.agent-skills.lock.json` records destinations, file hashes, executable bits, and source revisions. It remains untracked. New skills are available on the next turn.
 
+## Security audit trial
+
+`security-audit-testing` is an experimental copy of [Cloudflare's security-audit skill](https://github.com/cloudflare/security-audit-skill), pinned to [`c1c8a8c1471069fb0e188eeaff69b8e8db6564a8`](https://github.com/cloudflare/security-audit-skill/commit/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8). It retains the complete upstream workflow, references, schema, validators, and tests. Only the discovery name, description, provenance note, and UI metadata are adapted for the trial.
+
+Install just the trial in Codex and Claude Code. These commands select the normal Codex home explicitly so install and removal use the same paths even in a T3 session with a symlinked `CODEX_HOME`. Substitute a custom home consistently if needed.
+
+```sh
+CODEX_HOME="$HOME/.codex" ./scripts/install.sh security-audit-testing
+```
+
+[`profiles/security-testing.txt`](profiles/security-testing.txt) selects the normal collection plus the trial. Use `CODEX_HOME="$HOME/.codex" ./scripts/install.sh --profile security-testing` to install that whole selection. The default remains `current`; a normal install does not add or reinstall the trial.
+
+On the next turn, try `Use $security-audit-testing for a quick security audit of <repo or subsystem>`. Full audits require subagents, Node.js, and the upstream OS-enforced sandbox controls for target-code execution. Source review can proceed when execution is unavailable; the report must disclose the resulting validation gaps.
+
+To remove the installed trial and return to the normal selection:
+
+```sh
+CODEX_HOME="$HOME/.codex" ./scripts/install.sh status --profile current
+CODEX_HOME="$HOME/.codex" ./scripts/install.sh prune --profile current --yes
+```
+
+Prune removes installer-managed copies outside `current`, including this trial; it preserves unmanaged skills. Inspect status for any other stale managed entries before pruning. The repository copy stays available for reinstalling. Revert the trial's import commit as well if you want to discard it from the collection entirely.
+
+Other sources checked on 2026-11-04:
+
+- [Trail of Bits skills](https://github.com/trailofbits/skills) includes focused tools such as `differential-review`, `variant-analysis`, and `fp-check`. These are useful candidates for later trials, rather than a single replacement for Cloudflare's repository-wide workflow.
+- [Sentry security-review](https://github.com/getsentry/skills/tree/main/skills/security-review) provides a focused file/diff review. Its current instructions include a blanket exclusion for authenticated code paths and unconditional pattern-based flags; review those rules before adopting it for access-control audits.
+
 ## Requirements
 
 - An authenticated GitHub CLI, `gh`, for PR workflows.
@@ -52,7 +80,7 @@ The machine-specific `.agent-skills.lock.json` records destinations, file hashes
 
 ## Update skills
 
-[`upstreams.json`](upstreams.json) records one update source for each active skill. The nine tstack skills track `t3dotgg/tstack`; `upload-file` is maintained locally.
+[`upstreams.json`](upstreams.json) records one update source for each active skill. The nine tstack skills track `t3dotgg/tstack`; the optional security audit trial tracks `cloudflare/security-audit-skill`; `upload-file` is maintained locally.
 
 1. Run `python3 scripts/check-upstreams.py` to find upstream changes.
 2. Review every changed tracked path, including supporting scripts and the license. Preserve local adaptations recorded in the map.
@@ -73,3 +101,5 @@ The installer reads only `skills/active/` and never installs from `poteto/`. The
 The nine tstack skills are by Theo Browne, under the [MIT license](skills/active/full-send/LICENSE). They were imported from commit `92e38e2cf677a84a142e8df296861c588542135c` and reviewed through `1085050f3baed1ac724caa4a8166145fb2ac88af`, with the license bundled in every skill. Local adaptations in `upstreams.json` configure council's three-model panel across two providers and make babysit-pr resolve review threads after their findings are fixed, checked, and pushed. The other imported instructions and supporting files are unchanged.
 
 `upload-file` is the existing locally maintained utility. Historical author credits, licenses, and adaptation notes remain in `poteto/`.
+
+`security-audit-testing` is by Cloudflare, Inc., under its bundled [MIT license](skills/active/security-audit-testing/LICENSE). Its source revision and trial adaptations are recorded in `upstreams.json`.
