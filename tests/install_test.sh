@@ -116,7 +116,7 @@ mv "$test_root/repo/skills/active/legacy-babysit-pr" "$test_root/repo/skills/arc
 
 # The default profile installs the maintained selection in both accounts.
 install_output="$(run_installer 2>&1)"
-assert_contains "$install_output" "Installed 10 active skill(s)"
+assert_contains "$install_output" "Installed 11 active skill(s)"
 for account in codex claude; do
   while IFS= read -r skill; do
     [ -f "$test_root/$account/skills/$skill/SKILL.md" ] || fail "default profile omitted $account/$skill"

@@ -11,4 +11,4 @@ When asked to update skills, read the [update procedure](README.md#update-skills
 
 Keep installation profiles separate from update sources. An update request covers active repository skills; include disabled, archived, or separately supplied skills only when requested. Use installer status to distinguish upstream changes from missing or differing installed copies.
 
-`poteto/` preserves the previous collection and its configuration. Never install from it during a normal update. The current profile contains the nine tstack skills and the locally maintained `upload-file` skill.
+`poteto/` preserves the previous collection and its configuration. Never install from it during a normal update. The current profile contains the nine tstack skills, the locally maintained `upload-file` skill, and pstack’s `statechart` skill.

@@ -7,6 +7,10 @@
     "cloudflare-security-audit": {
       "repository": "cloudflare/security-audit-skill",
       "branch": "main"
+    },
+    "pstack": {
+      "repository": "cursor/plugins",
+      "branch": "main"
     }
   },
   "skills": {
@@ -129,6 +133,19 @@
         "Trial installation named security-audit-testing; mark the frontmatter and UI as experimental and add a source/provenance note. The upstream audit workflow, schema, validators, tests, and domain references are unchanged.",
         "Bundle the upstream MIT license. All files under skills/security-audit and LICENSE are retained; no upstream files are omitted.",
         "Keep the trial outside profiles/current.txt and profiles/default. profiles/security-testing.txt adds it to the current collection; pruning with the current profile removes the trial installations."
+      ]
+    },
+    "statechart": {
+      "upstream": "pstack",
+      "paths": [
+        "pstack/skills/statechart",
+        "pstack/LICENSE"
+      ],
+      "reviewed_commit": "2776ddd2355d6d6c8747d3964600f28daf62f049",
+      "adaptations": [
+        "Bundle Lauren Tan’s upstream MIT license. Retain the complete statechart workflow, renderer reference, scripts, and test corpus without changes.",
+        "Add Codex UI metadata and preserve upstream explicit invocation with allow_implicit_invocation=false.",
+        "Include statechart in the current and security-testing profiles."
       ]
     }
   }

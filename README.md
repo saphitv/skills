@@ -1,6 +1,6 @@
 # Agent skills
 
-Personal skills for Codex and Claude Code. The current profile installs the nine skills from [Theo Browne's tstack](https://github.com/t3dotgg/tstack) and the locally maintained `upload-file` skill.
+Personal skills for Codex and Claude Code. The current profile installs the nine skills from [Theo Browne's tstack](https://github.com/t3dotgg/tstack), the locally maintained `upload-file` skill, and pstack’s `statechart` skill.
 
 ## Active skills
 
@@ -16,8 +16,9 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 | `modernize` | Rebase an old PR and assess whether it is still needed. |
 | `leaving-pr-comments` | Format agent-authored GitHub comments. |
 | `upload-file` | Upload a requested file with the existing `upload` command. |
+| `statechart` | Check a TLA+ model and draw its states and shortest bug paths as Mermaid. |
 
-[`profiles/current.txt`](profiles/current.txt) selects all ten skills. [`profiles/tstack.txt`](profiles/tstack.txt) selects the nine upstream skills. [`profiles/default`](profiles/default) selects `current`.
+[`profiles/current.txt`](profiles/current.txt) selects all eleven skills. [`profiles/tstack.txt`](profiles/tstack.txt) selects the nine upstream skills. [`profiles/default`](profiles/default) selects `current`.
 
 Council defaults to Claude Opus 5.5 at `high`, GPT-6.1 Sol at `high`, and GPT-6.1 Terra at `xhigh`. It intentionally uses two OpenAI reviewers and needs no third provider. Explicitly named council members or effort settings override these defaults. Unavailable members are reported rather than silently replaced. Provider account IDs are resolved from the live catalog on each machine.
 
@@ -80,7 +81,7 @@ Other sources checked on 2026-11-04:
 
 ## Update skills
 
-[`upstreams.json`](upstreams.json) records one update source for each active skill. The nine tstack skills track `t3dotgg/tstack`; the optional security audit trial tracks `cloudflare/security-audit-skill`; `upload-file` is maintained locally.
+[`upstreams.json`](upstreams.json) records one update source for each active skill. The nine tstack skills track `t3dotgg/tstack`; statechart tracks `cursor/plugins` under `pstack/`; the optional security audit trial tracks `cloudflare/security-audit-skill`; `upload-file` is maintained locally.
 
 1. Run `python3 scripts/check-upstreams.py` to find upstream changes.
 2. Review every changed tracked path, including supporting scripts and the license. Preserve local adaptations recorded in the map.
@@ -103,3 +104,9 @@ The nine tstack skills are by Theo Browne, under the [MIT license](skills/active
 `upload-file` is the existing locally maintained utility. Historical author credits, licenses, and adaptation notes remain in `poteto/`.
 
 `security-audit-testing` is by Cloudflare, Inc., under its bundled [MIT license](skills/active/security-audit-testing/LICENSE). Its source revision and trial adaptations are recorded in `upstreams.json`.
+
+## Statechart
+
+`statechart` is by Lauren Tan, imported from `cursor/plugins` at `2776ddd2355d6d6c8747d3964600f28daf62f049`, with its [MIT license](skills/active/statechart/LICENSE). The full workflow, renderer reference, executable helper, and test corpus are retained. Codex metadata preserves explicit invocation.
+
+Read [the skill](skills/active/statechart/SKILL.md), then try `Use $statechart to model <flow or protocol> and show the shortest path to each broken rule.` It needs mise and Node 22.18–22.x, Node 23.6+, Bun 1.1.5+, or Deno 2+. Its first run downloads pinned Java and TLC through mise; image rendering uses Pele as described in the bundled reference.
