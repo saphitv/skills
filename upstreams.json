@@ -11,6 +11,10 @@
     "pstack": {
       "repository": "cursor/plugins",
       "branch": "main"
+    },
+    "matt-pocock": {
+      "repository": "mattpocock/skills",
+      "branch": "main"
     }
   },
   "skills": {
@@ -146,6 +150,20 @@
         "Bundle Lauren Tan’s upstream MIT license. Retain the complete statechart workflow, renderer reference, scripts, and test corpus without changes.",
         "Add Codex UI metadata and preserve upstream explicit invocation with allow_implicit_invocation=false.",
         "Include statechart in the current and security-testing profiles."
+      ]
+    },
+    "retro": {
+      "upstream": "matt-pocock",
+      "paths": [
+        "skills/engineering/retro",
+        "skills/productivity/writing-for-agents",
+        "LICENSE"
+      ],
+      "reviewed_commit": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+      "adaptations": [
+        "Bundle Matt Pocock’s MIT license and retain the complete retro workflow and upstream Codex UI metadata with explicit invocation.",
+        "Bundle writing-for-agents/SKILL.md and SKILL-MECHANICS.md as references and replace Skill-tool calls with local file links for Codex and Claude compatibility. The dependency UI metadata is omitted because it is a reference, not a separately installed skill.",
+        "Include retro in the current and security-testing profiles."
       ]
     }
   }
