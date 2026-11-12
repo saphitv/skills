@@ -1,6 +1,6 @@
 # Agent skills
 
-Personal skills for Codex and Claude Code. The current profile installs the nine skills from [Theo Browne's tstack](https://github.com/t3dotgg/tstack), the locally maintained `upload-file` skill, pstack’s `statechart` skill, and Matt Pocock’s `retro` skill.
+Personal skills for Codex and Claude Code. The current profile installs the nine skills from [Theo Browne's tstack](https://github.com/t3dotgg/tstack), the locally maintained `upload-file` skill, pstack’s `statechart` skill, Matt Pocock’s `retro` skill, and shadcn’s `improve` skill.
 
 ## Active skills
 
@@ -18,8 +18,9 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 | `upload-file` | Upload a requested file with the existing `upload` command. |
 | `retro` | Review a coding session and suggest improvements to the agent environment. |
 | `statechart` | Check a TLA+ model and draw its states and shortest bug paths as Mermaid. |
+| `improve` | Audit a codebase and write self-contained implementation plans for other agents. |
 
-[`profiles/current.txt`](profiles/current.txt) selects all twelve skills. [`profiles/tstack.txt`](profiles/tstack.txt) selects the nine upstream skills. [`profiles/default`](profiles/default) selects `current`.
+[`profiles/current.txt`](profiles/current.txt) selects all thirteen skills. [`profiles/tstack.txt`](profiles/tstack.txt) selects the nine upstream skills. [`profiles/default`](profiles/default) selects `current`.
 
 Council defaults to Claude Opus 5.5 at `high`, GPT-6.1 Sol at `high`, and GPT-6.1 Terra at `xhigh`. It intentionally uses two OpenAI reviewers and needs no third provider. Explicitly named council members or effort settings override these defaults. Unavailable members are reported rather than silently replaced. Provider account IDs are resolved from the live catalog on each machine.
 
@@ -82,7 +83,7 @@ Other sources checked on 2026-11-04:
 
 ## Update skills
 
-[`upstreams.json`](upstreams.json) records one update source for each active skill. The nine tstack skills track `t3dotgg/tstack`; statechart tracks `cursor/plugins` under `pstack/`; retro and its bundled writing guide track `mattpocock/skills`; the optional security audit trial tracks `cloudflare/security-audit-skill`; `upload-file` is maintained locally.
+[`upstreams.json`](upstreams.json) records one update source for each active skill. The nine tstack skills track `t3dotgg/tstack`; statechart tracks `cursor/plugins` under `pstack/`; retro and its bundled writing guide track `mattpocock/skills`; improve tracks `shadcn/improve`; the optional security audit trial tracks `cloudflare/security-audit-skill`; `upload-file` is maintained locally.
 
 1. Run `python3 scripts/check-upstreams.py` to find upstream changes.
 2. Review every changed tracked path, including supporting scripts and the license. Preserve local adaptations recorded in the map.
@@ -115,3 +116,9 @@ Read [the skill](skills/active/statechart/SKILL.md), then try `Use $statechart t
 ## Retro
 
 `retro` is by Matt Pocock, imported from `mattpocock/skills` at `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d` with its MIT license. The writing-for-agents dependency is bundled as a reference so both Codex and Claude can read it without a separate skill installation. Invocation remains explicit.
+
+## Improve
+
+`improve` is by shadcn, imported from [shadcn/improve](https://github.com/shadcn/improve) at `cac56e1ebd3c279aa9153616cfeac7b174ab90f9`, with its [MIT license](skills/active/improve/LICENSE). The upstream skill and all three reference guides are unchanged.
+
+Try `Use $improve quick` for an audit or `Use $improve plan <description>` for a self-contained handoff plan. The advisor writes plans without editing source code; the `execute` variant requires a host that supports executor subagents in isolated worktrees.

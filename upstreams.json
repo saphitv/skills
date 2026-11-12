@@ -15,6 +15,10 @@
     "matt-pocock": {
       "repository": "mattpocock/skills",
       "branch": "main"
+    },
+    "shadcn-improve": {
+      "repository": "shadcn/improve",
+      "branch": "main"
     }
   },
   "skills": {
@@ -164,6 +168,18 @@
         "Bundle Matt Pocock’s MIT license and retain the complete retro workflow and upstream Codex UI metadata with explicit invocation.",
         "Bundle writing-for-agents/SKILL.md and SKILL-MECHANICS.md as references and replace Skill-tool calls with local file links for Codex and Claude compatibility. The dependency UI metadata is omitted because it is a reference, not a separately installed skill.",
         "Include retro in the current and security-testing profiles."
+      ]
+    },
+    "improve": {
+      "upstream": "shadcn-improve",
+      "paths": [
+        "skills/improve",
+        "LICENSE.md"
+      ],
+      "reviewed_commit": "cac56e1ebd3c279aa9153616cfeac7b174ab90f9",
+      "adaptations": [
+        "Bundle shadcn’s upstream MIT license as LICENSE. Retain SKILL.md and all three reference guides unchanged; no tracked upstream files are omitted.",
+        "Include improve in the current and security-testing profiles."
       ]
     }
   }
