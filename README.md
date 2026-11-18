@@ -8,7 +8,7 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 | --- | --- |
 | `full-send` | Complete, validate, review, file, monitor, and merge a PR. |
 | `full-stop` | Prepare a PR for the user to merge. |
-| `council` | Request reviews from Claude Opus 5.5, GPT-6.1 Sol, and GPT-6.1 Terra across two providers. |
+| `council` | Request reviews from Claude Opus 5.5, GPT-6.2 Sol, and GPT-6.2 Astra across two providers. |
 | `sol-loop` | Repeat reviews with GPT Sol until agreement. |
 | `file-pr` | File a concise PR focused on the problem. |
 | `takeover` | Finish an existing PR, branch, or agent thread while preserving contributor credit. |
@@ -22,7 +22,7 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 
 [`profiles/current.txt`](profiles/current.txt) selects all thirteen skills. [`profiles/tstack.txt`](profiles/tstack.txt) selects the nine upstream skills. [`profiles/default`](profiles/default) selects `current`.
 
-Council defaults to Claude Opus 5.5 at `high`, GPT-6.1 Sol at `high`, and GPT-6.1 Terra at `xhigh`. It intentionally uses two OpenAI reviewers and needs no third provider. Explicitly named council members or effort settings override these defaults. Unavailable members are reported rather than silently replaced. Provider account IDs are resolved from the live catalog on each machine.
+Council defaults to Claude Opus 5.5 at `high`, GPT-6.2 Sol at `high`, and GPT-6.2 Astra at `high`. It intentionally uses two OpenAI reviewers and needs no third provider. Explicitly named council members or effort settings override these defaults. Unavailable members are reported rather than silently replaced. Provider account IDs are resolved from the live catalog on each machine.
 
 ## Install
 

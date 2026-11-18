@@ -15,8 +15,8 @@ or feedback. Unless the user's instructions specify different council members
 or effort, use these three distinct models:
 
 - Anthropic Claude Opus 5.5 (`claude-opus-5-5`), effort `high`.
-- OpenAI GPT-6.1 Sol (`gpt-6.1-sol`), reasoning effort `high`.
-- OpenAI GPT-6.1 Terra (`gpt-6.1-terra`), reasoning effort `xhigh`.
+- OpenAI GPT-6.2 Sol (`gpt-6.2-sol`), reasoning effort `high`.
+- OpenAI GPT-6.2 Astra (`gpt-6.2-astra`), reasoning effort `high`.
 
 This panel intentionally uses two providers, with two OpenAI models. It does
 not require a third provider.
@@ -50,8 +50,8 @@ Rounds: 2
 | Delegate | Round 1 | Round 2 |
 | --- | --- | --- |
 | Claude Opus 5.5 | 7/10 | 9/10 |
-| GPT-6.1 Sol | 8/10 | 10/10 |
-| GPT-6.1 Terra | 7/10 | 9/10 |
+| GPT-6.2 Sol | 8/10 | 10/10 |
+| GPT-6.2 Astra | 7/10 | 9/10 |
 ```
 
 If a delegate gives no score, write `no score`. Do not invent one.
