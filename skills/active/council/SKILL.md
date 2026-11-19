@@ -17,6 +17,9 @@ or effort, use these three distinct models:
 - Anthropic Claude Opus 5.5 (`claude-opus-5-5`), effort `high`.
 - OpenAI GPT-6.2 Sol (`gpt-6.2-sol`), reasoning effort `high`.
 - OpenAI GPT-6.2 Astra (`gpt-6.2-astra`), reasoning effort `high`.
+- Optionally add Gemini 4 Neon (`gemini-4-neon`) through Antigravity on linked
+  `mini` when available. The lead agent independently verifies Neon's findings
+  before acting on them.
 
 This panel intentionally uses two providers, with two OpenAI models. It does
 not require a third provider.
