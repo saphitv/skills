@@ -22,7 +22,7 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 
 [`profiles/current.txt`](profiles/current.txt) selects all thirteen skills. [`profiles/tstack.txt`](profiles/tstack.txt) selects the nine upstream skills. [`profiles/default`](profiles/default) selects `current`.
 
-Council defaults to Claude Opus 5.5 at `high`, GPT-6.2 Sol at `high`, and GPT-6.2 Astra at `high`. Gemini 4 Neon joins automatically whenever Antigravity on `mini` can run it. Explicitly named council members or effort settings override these defaults. The council reports unavailable members and resolves provider account IDs from the live catalog on each machine.
+Council defaults to Claude Opus 5.5 at `high`, GPT-6.2 Sol at `high`, and GPT-6.2 Astra at `high`. Gemini 4 Neon joins automatically when available, preferring local Antigravity and falling back to a linked environment if local Antigravity cannot run it. Explicitly named council members or effort settings override these defaults. The council reports unavailable members and resolves provider account IDs from the live catalog on each machine.
 
 ## Install
 

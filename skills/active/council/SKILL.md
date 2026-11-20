@@ -17,12 +17,15 @@ specifies different ones:
 - Anthropic Claude Opus 5.5 (`claude-opus-5-5`), effort `high`.
 - OpenAI GPT-6.2 Sol (`gpt-6.2-sol`), reasoning effort `high`.
 - OpenAI GPT-6.2 Astra (`gpt-6.2-astra`), reasoning effort `high`.
-- Include Gemini 4 Neon (`gemini-4-neon`) whenever Antigravity on `mini` can
-  run it as a delegate. Check the local provider catalog when running on
-  `mini`. Otherwise, check the linked `mini` and pass its environment ID and
-  Antigravity provider instance to `delegate_task`. If `mini`, Antigravity, or
-  Neon is unavailable, run the other members and report why Neon could not run.
-  Independently verify Neon's findings before acting on them.
+- Include Gemini 4 Neon (`gemini-4-neon`) automatically whenever Antigravity
+  can run it as a delegate. Check local `orchestrator_capabilities` first and
+  use the current machine's resolved Antigravity provider instance. If local
+  Antigravity cannot run it, use `t3_environment_links` to find reachable
+  linked environments and check their provider catalogs. Pass the chosen
+  remote `environmentId` and Antigravity provider instance to `delegate_task`.
+  Start at most one Neon delegate. If no eligible environment can run Neon,
+  run the other members and report why Neon could not run. Independently verify
+  Neon's findings before acting on them.
 
 In T3 Code, use `orchestrator_capabilities` to resolve each model to an enabled
 provider instance that can run child tasks. Do not hardcode account-specific
