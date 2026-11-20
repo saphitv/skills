@@ -8,7 +8,7 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 | --- | --- |
 | `full-send` | Complete, validate, review, file, monitor, and merge a PR. |
 | `full-stop` | Prepare a PR for the user to merge. |
-| `council` | Request reviews from Claude Opus 5.5, GPT-6.2 Sol, and GPT-6.2 Astra across two providers. |
+| `council` | Request reviews from Claude Opus 5.5, GPT-6.2 Sol, GPT-6.2 Astra, and Gemini 4 Neon when available. |
 | `sol-loop` | Repeat reviews with GPT Sol until agreement. |
 | `file-pr` | File a concise PR focused on the problem. |
 | `takeover` | Finish an existing PR, branch, or agent thread while preserving contributor credit. |
@@ -22,7 +22,7 @@ Personal skills for Codex and Claude Code. The current profile installs the nine
 
 [`profiles/current.txt`](profiles/current.txt) selects all thirteen skills. [`profiles/tstack.txt`](profiles/tstack.txt) selects the nine upstream skills. [`profiles/default`](profiles/default) selects `current`.
 
-Council defaults to Claude Opus 5.5 at `high`, GPT-6.2 Sol at `high`, and GPT-6.2 Astra at `high`. It intentionally uses two OpenAI reviewers and needs no third provider. Explicitly named council members or effort settings override these defaults. Unavailable members are reported rather than silently replaced. Provider account IDs are resolved from the live catalog on each machine.
+Council defaults to Claude Opus 5.5 at `high`, GPT-6.2 Sol at `high`, and GPT-6.2 Astra at `high`. Gemini 4 Neon joins automatically whenever Antigravity on `mini` can run it. Explicitly named council members or effort settings override these defaults. The council reports unavailable members and resolves provider account IDs from the live catalog on each machine.
 
 ## Install
 
@@ -101,7 +101,7 @@ The installer reads only `skills/active/` and never installs from `poteto/`. The
 
 ## Credits
 
-The nine tstack skills are by Theo Browne, under the [MIT license](skills/active/full-send/LICENSE). They were imported from commit `92e38e2cf677a84a142e8df296861c588542135c` and reviewed through `1085050f3baed1ac724caa4a8166145fb2ac88af`, with the license bundled in every skill. Local adaptations in `upstreams.json` configure council's three-model panel across two providers and make babysit-pr resolve review threads after their findings are fixed, checked, and pushed. The other imported instructions and supporting files are unchanged.
+The nine tstack skills are by Theo Browne, under the [MIT license](skills/active/full-send/LICENSE). They were imported from commit `92e38e2cf677a84a142e8df296861c588542135c` and reviewed through `1085050f3baed1ac724caa4a8166145fb2ac88af`, with the license bundled in every skill. Local adaptations in `upstreams.json` configure the council's reviewer lineup and make babysit-pr resolve review threads after their findings are fixed, checked, and pushed. The other imported instructions and supporting files are unchanged.
 
 `upload-file` is the existing locally maintained utility. Historical author credits, licenses, and adaptation notes remain in `poteto/`.
 
