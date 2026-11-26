@@ -101,7 +101,7 @@ The installer reads only `skills/active/` and never installs from `poteto/`. The
 
 ## Credits
 
-The nine tstack skills are by Theo Browne, under the [MIT license](skills/active/full-send/LICENSE). They were imported from commit `92e38e2cf677a84a142e8df296861c588542135c` and reviewed through `1085050f3baed1ac724caa4a8166145fb2ac88af`, with the license bundled in every skill. Local adaptations in `upstreams.json` configure the council's reviewer lineup and make babysit-pr resolve review threads after their findings are fixed, checked, and pushed. The other imported instructions and supporting files are unchanged.
+The nine tstack skills are by Theo Browne, under the [MIT license](skills/active/full-send/LICENSE). They were imported from commit `92e38e2cf677a84a142e8df296861c588542135c`, with the license bundled in every skill. The reviewed commits and local adaptations are recorded in [upstreams.json](upstreams.json). The adaptations configure the council's reviewer lineup and make babysit-pr resolve review threads after their findings are fixed, checked, and pushed.
 
 `upload-file` is the existing locally maintained utility. Historical author credits, licenses, and adaptation notes remain in `poteto/`.
 
